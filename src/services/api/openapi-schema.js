@@ -1,7 +1,7 @@
 const Schema = {
   openapi: "3.0.2",
   info: {
-    title: "Coach Wild.ai",
+    title: "forest.ly",
     version: "",
   },
   paths: {
@@ -11,7 +11,7 @@ const Schema = {
         description: "Simply returns data",
         parameters: [],
         responses: {
-          "200": {
+          200: {
             content: {
               "application/json": {
                 schema: {

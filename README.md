@@ -13,7 +13,7 @@ Next clone the repository,
 
 ```shell
 git clone https://github.com/hafizmuhammadfarooq786/forestly-frontend.git
-cd coach-dashboard
+cd forestly-frontend
 npm install
 ```
 
