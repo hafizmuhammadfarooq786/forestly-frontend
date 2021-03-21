@@ -6,7 +6,7 @@ import OpenAPIClientAxios from "openapi-client-axios";
 import Schema from "./openapi-schema";
 
 const openApi = new OpenAPIClientAxios({ definition: Schema });
-const API_URL = process.env.REACT_APP_BASE_URL;
+const API_URL = process.env.REACT_APP_API_URL;
 /**
  *
  * @type
