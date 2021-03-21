@@ -3,7 +3,7 @@ import { Form, Input, Select, Modal, Button } from "antd";
 import { useSelector, useDispatch } from "react-redux";
 import Camera from "../assets/icons/camera.png";
 import Cropper from "react-cropper";
-import LoadingOverlay from "react-loading-overlay";
+import Loading from "../components/common/Loading";
 import CrossIcon from "../assets/icons/cross.png";
 import LoadingButton from "../components/common/LoadingButton";
 import { createNotification } from "../store/app/actions";
@@ -108,12 +108,7 @@ const Settings = () => {
   }, []);
 
   return (
-    <LoadingOverlay
-      active={loading}
-      className="loader"
-      spinner
-      text="Loading..."
-    >
+    <Loading active={loading}>
       <div
         style={{
           display: "flex",
@@ -486,7 +481,7 @@ const Settings = () => {
           </Button>
         </div>
       </Modal>
-    </LoadingOverlay>
+    </Loading>
   );
 };
 

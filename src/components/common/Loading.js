@@ -1,7 +1,8 @@
 import React from "react";
 import LoadingOverlay from "react-loading-overlay";
+import { HashLoader } from "react-spinners";
 
-const Loading = () => (
+const Loading = (props) => (
   <div
     style={{
       height: "100%",
@@ -9,10 +10,16 @@ const Loading = () => (
       flexDirection: "column",
       justifyContent: "center",
       alignItems: "center",
-      background: "#274B2870",
+      background: "#274B28",
     }}
   >
-    <LoadingOverlay active className="loader" spinner text="Loading..." />
+    <LoadingOverlay
+      active={props.active}
+      className="loader"
+      spinner={<HashLoader size={90} color="#fff" />}
+    >
+      {props.children}
+    </LoadingOverlay>
   </div>
 );
 

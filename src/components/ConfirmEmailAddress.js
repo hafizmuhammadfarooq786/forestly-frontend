@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { history } from "../index";
 import { useDispatch } from "react-redux";
-import LoadingOverlay from "react-loading-overlay";
+import Loading from "../components/common/Loading";
 import { split } from "lodash";
 import { confirmEmailAddress, createNotification } from "../store/app/actions";
 
@@ -25,14 +25,7 @@ const Dashboard = () => {
   useEffect(() => {
     getParams();
   }, []);
-  return (
-    <LoadingOverlay
-      active={loading}
-      className="loader"
-      spinner
-      text="Loading..."
-    ></LoadingOverlay>
-  );
+  return <Loading active={loading}></Loading>;
 };
 
 export default Dashboard;
