@@ -1,0 +1,249 @@
+@import '~antd/dist/antd.css';
+@font-face {
+  font-family: 'Circular Std';
+  src: local('Circular Std Book'), local('Circular-Std-Book'),
+    url('fonts/CircularStd-Book.woff2') format('woff2'),
+    url('fonts/CircularStd-Book.woff') format('woff'),
+    url('fonts/CircularStd-Book.ttf') format('truetype');
+  font-style: normal;
+}
+.App {
+  background-color: #ffffff;
+  min-height: 100vh;
+  width: 100%;
+  overflow-x: hidden;
+}
+.breadcrumb {
+  padding: 0.5rem 2.5em 0.5rem 296px;
+  margin: 0;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background-color: #ffffff;
+  box-shadow: 0 5px 5px rgb(0 0 0 / 30%);
+  max-height: 72px;
+  max-width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-left: -272px;
+}
+.content{
+  padding: 0 0 3.5em;
+  margin: 0;
+  min-height: 100vh;
+  max-width: 85%;
+  margin-left: 272px;
+}
+.ant-menu-item-active{
+  background-color: #274B28 !important;
+}
+.menu-item{
+  margin-left: 0 !important;
+  padding-left: '3em'!important;
+  height: '4.5em' !important;
+  display: 'flex' !important;
+  align-items: 'center' !important;
+}
+.ant-card-body {
+  width: 100% !important;
+  display: flex !important;
+  padding-bottom: 0px !important;
+}
+
+.ant-btn{
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.ant-btn >span{
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.ant-btn:hover,
+.ant-btn:active,
+.ant-btn:focus{
+  color: #151515;
+  background-color: #151515;
+  cursor: pointer !important;
+  border: none !important;
+}
+
+.ant-btn[disabled]:hover{
+  cursor: context-menu !important;
+}
+.loader{
+  display: flex !important;
+  height: 100% !important;
+  flex-direction: column !important;
+}
+.container{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  background-color: #274B28;
+  height: 100%;
+  min-height: 100vh;
+  flex-direction: column;
+}
+.container_404{
+  background-color: white;
+  height: 512px;
+  border-radius: 16px;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  width: 786px;
+  flex-direction: column;
+  padding: 0px 6em;
+}
+
+@media (max-width: 768px){
+  .container_404 {
+    width: 96%;
+  }
+}
+.signing-form{
+  height: 100vh;
+  width: 100vw;
+  background-color: #274B28;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.card{
+  width: 100%;
+  padding: 1rem !important;
+  background-color: #ffffff;
+  border-radius: 16px !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+label{
+  color: #151515 !important;
+  font-family: "Circular Std";
+  font-weight: 900 !important;
+}
+
+.btn-sm-yellow, .btn-sm-yellow:hover, .btn-sm-yellow:active, .btn-sm-yellow:focus{
+  border-radius: 5px;
+  background-color: #FED64B !important;
+  color: #151515 !important;
+  font-family: "Circular Std";
+  font-weight: 900 !important;
+  padding: 6px 16px 3px;
+  display: flex;
+  height: 2.5rem !important;
+  justify-content: center;
+  align-items: center;
+  width: 120px;
+}
+.btn-sm-black,
+.btn-sm-black:active,
+.btn-sm-black:focus,
+.btn-sm-black:hover {
+  border-radius: 5px;
+  background-color: #274B28 !important;
+  color: #ffffff !important;
+  font-family: "Circular Std";
+  padding: 6px 16px 3px;
+  display: flex;
+  height: 2.5rem !important;
+  justify-content: center;
+  align-items: center;
+  width: 120px;
+}
+
+.btn-lg-black,
+.btn-lg-black:active,
+.btn-lg-black:focus,
+.btn-lg-black:hover {
+  margin-top: 2rem;
+  border-radius: 5px;
+  color: #ffffff;
+  background-color: #274B28;
+  border-color: rgb(21, 21, 21);
+  font-family: "Circular Std";
+  width: 100%;
+  min-height: 3rem !important;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+.btn-back{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  text-transform: uppercase;
+  background-color: #274B28;
+  color: #FFFFFF;
+  margin-top: 2rem;
+  font-size: 15px;
+  line-height: 18.97px;
+  letter-spacing: 2px;
+  font-weight: 700;
+  font-family: "Circular Std";
+  border-radius: 10px;
+  width: 160px;
+  height: 50px;
+  cursor: pointer !important;
+  border: 2px solid #274B28;
+}
+.btn-forgot, .btn-forgot:hover{
+  margin-top: 2rem;
+  border-radius: 5px;
+  color: #ffffff;
+  background-color: #274B28;
+  border-color: #274B28;
+  font-family: "Circular Std";
+  width: 100%;
+  min-height: 3rem !important;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+.heading-text{
+  color:#010101;
+  font-family: "Circular Std";
+  font-weight: 900;
+  font-size: 28px;
+  line-height: 35.42px;
+}
+.black-title{
+  color: #010101;
+  font-family: "Circular Std";
+  font-weight: 900;
+  font-size: 28px;
+  line-height: 35.42px;
+  text-transform: uppercase;
+  margin-top: 1rem;
+}
+.error-description, .support-description{
+  padding: 0;
+  margin: 0;
+  color: #010101;
+  font-family: "Circular Std";
+  font-weight: normal;
+  font-size: 28px;
+  line-height: 35.42px;
+}
+.description{
+  color: #010101;
+  font-family: "Circular Std";
+  font-weight: 900;
+  font-size: 18px;
+  line-height: 25.42px;
+}
