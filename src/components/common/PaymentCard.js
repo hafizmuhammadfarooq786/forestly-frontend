@@ -14,6 +14,9 @@ const PaymentCard = ({ searchActive, searchedSource, dataSource }) => {
   const [showEditPayment, setShowEditPayment] = useState(false);
   const [showPaymentHistory, setShowPaymentHistory] = useState(false);
 
+  const hideCardNumber = (str) => {
+    return "xxxx xxxx xxxx " + str.substr(str.length - 4);
+  };
   useEffect(() => {
     setPayments(dataSource);
   }, []);
@@ -248,7 +251,7 @@ const PaymentCard = ({ searchActive, searchedSource, dataSource }) => {
                     }}
                   >
                     <strong style={{ color: "#424242" }}>
-                      {payment.cardNumber}
+                      {hideCardNumber(payment.cardNumber)}
                     </strong>
                   </p>
                 </div>

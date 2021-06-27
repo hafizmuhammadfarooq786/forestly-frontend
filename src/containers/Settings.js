@@ -18,6 +18,7 @@ const Settings = () => {
   const [enabledForPassword, setEnabledForPassword] = useState({
     old_password: false,
     new_password: false,
+    confirm_password: false,
   });
 
   const enablingStatus = (enablerObject) => {
@@ -34,7 +35,11 @@ const Settings = () => {
   };
 
   const enablingStatusForPassword = (enablerObject) => {
-    if (enablerObject.old_password && enablerObject.new_password) {
+    if (
+      enablerObject.old_password &&
+      enablerObject.new_password &&
+      enablerObject.confirm_password
+    ) {
       return false;
     }
     return true;
@@ -329,6 +334,42 @@ const Settings = () => {
                               : setEnabledForPassword({
                                   ...enabledForPassword,
                                   new_password: false,
+                                });
+                          }}
+                        />
+                      </Form.Item>
+                    </div>
+                    <div style={{ display: "flex", width: "49%" }}>
+                      <Form.Item
+                        className="settings-form-item"
+                        label={
+                          <label className="settings-label">
+                            Confirm New Password
+                          </label>
+                        }
+                        name="confirm_password"
+                        initialValue={""}
+                        rules={[
+                          {
+                            required: true,
+                            message:
+                              "Please re-enter your new password which is required",
+                          },
+                        ]}
+                        required={false}
+                      >
+                        <Input.Password
+                          placeholder="Confirm new password"
+                          className="settings-value"
+                          onChange={(e) => {
+                            e.target.value.length > 0
+                              ? setEnabledForPassword({
+                                  ...enabledForPassword,
+                                  confirm_password: true,
+                                })
+                              : setEnabledForPassword({
+                                  ...enabledForPassword,
+                                  confirm_password: false,
                                 });
                           }}
                         />
