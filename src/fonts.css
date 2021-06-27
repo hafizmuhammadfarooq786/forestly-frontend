@@ -1,0 +1,29 @@
+@font-face {
+    font-display: swap;
+    font-family: CircularStd;
+    font-style: normal;
+    font-weight: 400;
+    src: local("CircularStd Book"),
+        local("CircularStd-Book"),
+        url(fonts/CircularStd-Book.woff2) format("woff2")
+}
+
+@font-face {
+    font-display: swap;
+    font-family: CircularStd;
+    font-style: normal;
+    font-weight: 700;
+    src: local("CircularStd Medium"),
+        local("CircularStd-Medium"),
+        url(fonts/CircularStd-Medium.woff2) format("woff2")
+}
+
+@font-face {
+    font-display: swap;
+    font-family: CircularStd;
+    font-style: normal;
+    font-weight: 900;
+    src: local("CircularStd Black"),
+        local("CircularStd-Black"),
+        url(fonts/CircularStd-Black.woff2) format("woff2")
+}

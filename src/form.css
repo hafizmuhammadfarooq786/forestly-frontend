@@ -1,0 +1,53 @@
+.update-form-item {
+    width: 100%;
+    margin: 0;
+    padding: 10px 0 21px;
+}
+
+
+.update-form input{
+    background: #FAFAFA !important;
+    border: 1px solid #E0E0E0 !important;
+    border-radius: 8px;
+    height: 56px;
+    width: 415px;
+    margin-left: 16px;
+    padding-left: 24px !important;
+    color: #424242 !important;
+    font-size: 20px !important;
+    line-height: 25px !important;
+}
+.update-form-select>div{
+    background: #FAFAFA !important;
+    border: 1px solid #E0E0E0 !important;
+    border-radius: 8px !important;
+    width: 96px !important;
+    height: 56px !important;
+    padding: 8px 12px !important;
+}
+.update-form .ant-select-arrow{
+    top: 65% !important;
+    right: 18px !important;
+}
+.settings-form-item {
+    width: 100%;
+    margin: 0;
+    padding: 10px 0 21px;
+}
+.settings-label {
+    color: #9E9E9E !important;
+    font-size: 16px !important;
+    line-height: 20px !important;
+}
+
+
+.settings-main input,
+.settings-main input[type="password"]{
+    padding: 16px !important;
+    color: #424242 !important;
+    font-size: 18px !important;
+    line-height: 23% !important;
+}
+.active-icon path{
+    fill: #274B28 !important;
+}

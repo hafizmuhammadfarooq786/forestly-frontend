@@ -1,0 +1,101 @@
+
+
+
+.tree-details-slider-container {
+  height: 433px;
+  width: 390px;
+  position: relative;
+  margin: auto;
+  overflow: hidden;
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.12);
+}
+
+.active {
+  display: inline-block;
+}
+
+.inactive {
+  display: none;
+}
+
+.tree-details-slider-container .slides {
+  height: 433px;
+  width: 100%;
+  position: relative;
+}
+
+.tree-details-slider-container.slide-image {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  object-fit: cover;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.tree-details-slider-container .slide-title {
+  font-weight: bold !important;
+  font-size: 24px;
+  line-height: 30px;
+}
+.tree-details-slider-container .slide-text {
+  font-size: 16px;
+  line-height: 20px;
+  margin: 6px 0 0 !important;
+}
+.tree-details-slider-container .slide-title,
+.tree-details-slider-container .slide-text {
+  color: white;
+}
+.tree-details-slider-container .slide-text {
+  margin-top: 8px;
+}
+
+.tree-details-slider-container .prev,
+.tree-details-slider-container .next {
+  cursor: pointer;
+  z-index: 9;
+  position: absolute;
+  top: 5%;
+  font-size: 20px;
+  color: white;
+}
+
+.tree-details-slider-container .prev {
+  right: 56px;
+}
+
+.tree-details-slider-container .prev:hover,
+.tree-details-slider-container .next:hover {
+  transition: all 0.5s ease-in;
+}
+
+.tree-details-slider-container .next {
+  right: 24px;
+}
+
+
+.tree-details-slider-container .all-dots {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  display: flex;
+  top: 90%;
+  justify-content: center;
+  z-index: 200;
+}
+.tree-details-slider-container .dot {
+  cursor: pointer;
+  height: 8px;
+  width: 8px;
+  margin: 0px 3px;
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.tree-details-slider-container .active-dot,
+.tree-details-slider-container .dot:hover {
+  background-color: rgba(255, 255, 255, 0.5);
+}

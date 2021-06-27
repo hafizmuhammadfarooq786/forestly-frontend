@@ -10,13 +10,13 @@ const Loading = (props) => (
       flexDirection: "column",
       justifyContent: "center",
       alignItems: "center",
-      background: "#274B28",
+      background: "#fffff",
     }}
   >
     <LoadingOverlay
-      active={props.active}
+      active
       className="loader"
-      spinner={<HashLoader size={90} color="#fff" />}
+      spinner={<HashLoader size={90} color="#274B28" />}
     >
       {props.children}
     </LoadingOverlay>

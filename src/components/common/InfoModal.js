@@ -30,7 +30,6 @@ const InfoModal = (props) => {
       </div>
       <p
         style={{
-          fontFamily: "Circular Std",
           fontWeight: 900,
           fontSize: "28px",
           lineHeight: "35.42px",
@@ -41,7 +40,6 @@ const InfoModal = (props) => {
 
       <p
         style={{
-          fontFamily: "Circular Std",
           fontWeight: 900,
           fontSize: "16px",
           lineHeight: "20.24px",
@@ -53,7 +51,6 @@ const InfoModal = (props) => {
 
       <p
         style={{
-          fontFamily: "Circular Std",
           fontWeight: 400,
           fontSize: "16px",
           lineHeight: "24px",
@@ -66,7 +63,6 @@ const InfoModal = (props) => {
 
       <p
         style={{
-          fontFamily: "Circular Std",
           fontWeight: 900,
           fontSize: "16px",
           lineHeight: "20.24px",
@@ -78,7 +74,6 @@ const InfoModal = (props) => {
 
       <p
         style={{
-          fontFamily: "Circular Std",
           fontWeight: 400,
           fontSize: "16px",
           lineHeight: "24px",
@@ -91,7 +86,6 @@ const InfoModal = (props) => {
 
       <p
         style={{
-          fontFamily: "Circular Std",
           fontWeight: 900,
           fontSize: "16px",
           lineHeight: "20.24px",
@@ -107,7 +101,6 @@ const InfoModal = (props) => {
         content.references.map((reference) => (
           <p
             style={{
-              fontFamily: "Circular Std",
               fontWeight: 400,
               fontSize: "16px",
               lineHeight: "24px",

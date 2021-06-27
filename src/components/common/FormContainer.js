@@ -1,21 +1,35 @@
 import React from "react";
-import { Row, Col, Card } from "antd";
-import { isMobileHook } from "./Responsive";
+import { Row, Col } from "antd";
+import Logo from "../../assets/logo.png";
+import LogoTextual from "../../assets/logo.svg";
 
 const FormContainer = (props) => {
-  const isMobile = isMobileHook();
-
   return (
-    <Row className="signing-form">
+    <Row style={{ height: "100vh", width: "100vw", background: "#274B28" }}>
       <Col
+        span={16}
         style={{
-          width: isMobile ? "96%" : "520px",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor: "#274B28",
+        }}
+      >
+        <img src={Logo} alt="forest-logo" style={{ height: 220, width: 220 }} />
+        <img src={LogoTextual} alt="forest-logo" style={{ marginTop: 32 }} />
+      </Col>
+      <Col
+        span={8}
+        style={{
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
+          background: "#ffffff",
+          boxShadow: "0 8px 24px 8px rgb(0 0 0 / 35%)",
         }}
       >
-        <Card className="card">{props.children}</Card>
+        {props.children}
       </Col>
     </Row>
   );

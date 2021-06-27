@@ -1,6 +1,5 @@
 import {
   put,
-  take,
   takeEvery,
   call,
   fork,
@@ -14,7 +13,6 @@ import {
   LOGOUT_USER,
   initialized,
   setUser,
-  logout as logoutAction,
   FETCH_USER,
   SET_LOGGED_USER,
   LOGIN_MANUAL,
@@ -27,6 +25,7 @@ import {
   DELETE_ACCOUNT,
 } from "./actions";
 import api from "../../services/api/ApiService";
+
 function getRefreshToken() {
   return String(window.localStorage.getItem("authRefreshToken"));
 }
@@ -37,6 +36,10 @@ function setRefreshToken(token) {
 
 function removeRefreshToken() {
   window.localStorage.removeItem("authRefreshToken");
+}
+
+function resetAll() {
+  window.localStorage.clear();
 }
 
 function refreshToken(token) {
@@ -70,7 +73,7 @@ function* getUser() {
 }
 
 function* logout() {
-  yield call(removeRefreshToken);
+  yield call(resetAll);
   yield call(unsetAuth);
   yield put(setUser(null));
   yield put(push("/login"));
@@ -80,8 +83,7 @@ function* refreshLoop(refresher) {
   let userSignedOut;
   while (!userSignedOut) {
     const { expired } = yield race({
-      expired: delay(270000), // Wait 4.5 min before refreshing
-      signout: take(LOGOUT_USER),
+      expired: delay(840000), // Wait 14 min before refreshing
     });
 
     // token expired first
@@ -98,13 +100,8 @@ function* refreshLoop(refresher) {
           yield call(getUser);
         }
       } catch (e) {
-        userSignedOut = true;
-        yield put(logoutAction());
+        console.log(e);
       }
-    }
-    // user signed out before token expiration
-    else {
-      userSignedOut = true;
     }
   }
 }
@@ -186,7 +183,7 @@ function* login({ payload: { form, onSuccess, onError } }) {
       yield call(setApiAuth, access);
       yield call(setLoggedUser, user, access, refresh);
       yield call(onSuccess);
-      yield put(push("/admin/dashboard"));
+      yield put(push("/dashboard/home"));
     } else {
       console.log(metadata.message);
       yield call(onError, metadata.message);
@@ -257,7 +254,7 @@ function* deleteAccount({ payload: { id, onSuccess, onError } }) {
     } = yield call(deleteThisAccount, id);
     if (metadata.status === "SUCCESS") {
       yield call(onSuccess);
-      yield put(logoutAction());
+      yield call(logout);
     } else {
       yield call(onError, metadata.status);
     }
@@ -281,7 +278,7 @@ function* emailVerification({ payload: { token, onSuccess, onError } }) {
       yield call(setApiAuth, access);
       yield call(setLoggedUser, user, access, refresh);
       yield call(onSuccess);
-      yield put(push("/admin/dashboard"));
+      yield put(push("/dashboard/home"));
     } else {
       console.log(metadata.message);
       yield call(onError, metadata.message);

@@ -1,0 +1,52 @@
+/* Active Button */
+
+.update-button,
+.update-button:hover {
+    border: 0px;
+    width: 100%;
+    display: inline-block;
+    position: relative;
+    z-index: 1;
+    border: 0px solid #274B28;
+    background-color: #274B28;
+    text-align: center;
+    font-size: 20px;
+    line-height: 25px;
+    height: 46px;
+    border-radius: 100px;
+    width: auto;
+    box-shadow: none !important;
+    font-weight: 700;
+    padding: 10px 32px 8px;
+    filter: drop-shadow(0px 6px 13px rgba(0, 0, 0, 0.12)) !important;
+}
+
+/* Disable Button */
+
+.update-button-disable,
+.update-button-disable:hover {
+    border: 0px;
+    display: inline-block;
+    position: relative;
+    z-index: 1;
+    background-color: #F5F5F5 !important;
+    text-align: center;
+    font-size: 20px;
+    line-height: 25px;
+    font-weight: 700;
+    height: 46px;
+    border-radius: 100px;
+    width: auto;
+    cursor: not-allowed !important;
+    padding: 10px 32px 8px;
+    filter: drop-shadow(0px 0.5px 4px rgba(0, 0, 0, 0.12)) !important;
+}
+
+
+.update-button h4{
+    color: #ffffff !important;
+}
+
+.update-button-disable h4{
+    color: #757575 !important;
+}

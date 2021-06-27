@@ -42,10 +42,20 @@ const ResetPassword = () => {
       <Form
         ref={formRef}
         layout="vertical"
-        style={{ width: "100%" }}
+        style={{ width: "75%", textAlign: "center" }}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
       >
+        <h1
+          style={{
+            color: "#274B28",
+            marginBottom: 44,
+            textTransform: "uppercase",
+            fontWeight: 800,
+          }}
+        >
+          Reset Password
+        </h1>
         <Form.Item
           label="NEW PASSWORD"
           name="password"
@@ -62,9 +72,8 @@ const ResetPassword = () => {
               borderRadius: 5,
               border: "2px solid #274B28",
               color: "#151515",
-              fontFamily: "Circular Std",
               boxShadow: "none",
-              height: "48px",
+              height: 48,
             }}
           />
         </Form.Item>
@@ -94,7 +103,6 @@ const ResetPassword = () => {
               borderRadius: 5,
               border: "2px solid #274B28",
               color: "#151515",
-              fontFamily: "Circular Std",
               boxShadow: "none",
               height: "48px",
             }}

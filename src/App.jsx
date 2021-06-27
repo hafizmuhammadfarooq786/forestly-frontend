@@ -2,6 +2,7 @@ import React, { useLayoutEffect, useEffect } from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
 import { ConnectedRouter } from "connected-react-router";
 import { useSelector, useDispatch } from "react-redux";
+import { hot } from "react-hot-loader/root";
 import Login from "./components/SignIn";
 import Register from "./components/SignUp";
 import ConfirmEmailAddress from "./components/ConfirmEmailAddress";
@@ -62,7 +63,7 @@ const App = () => {
     }
 
     if ((user && pathname === "/login") || (user && pathname === "/")) {
-      return <Redirect to="/admin/dashboard" />;
+      return <Redirect to="/dashboard/home" />;
     }
 
     return (
@@ -71,7 +72,7 @@ const App = () => {
           <PrivateRoute
             user={user}
             exact
-            path="/admin/*"
+            path="/dashboard/*"
             component={(props) => <Dashboard {...props} />}
           />
           <Route
@@ -140,4 +141,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default process.env.REACT_APP_ENV === "development" ? hot(App) : App;

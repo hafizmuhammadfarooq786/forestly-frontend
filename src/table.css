@@ -1,0 +1,25 @@
+.history-table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.history-table td,
+.history-table th {
+    border: none;
+    padding: 16px;
+}
+.history-table tr td:nth-child(4) {
+    text-align: end !important;
+}
+
+.history-table tr:hover {
+    background-color: #ddd;
+}
+
+.history-table th {
+    text-align: left;
+    background-color: #274B28;
+    color: white;
+    font-size: 16px;
+    line-height: 20px;
+}

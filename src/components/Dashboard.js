@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Redirect } from "react-router-dom";
 import { Layout } from "antd";
 import Sidebar from "./Sidebar";
+import PatchBreadcrumb from "./PatchBreadcrumb";
 import Breadcrumb from "./Breadcrumb";
 import AllSteps from "./DashboardSteps";
 import { removeNotification } from "../store/app/actions";
@@ -30,8 +31,18 @@ const Dashboard = (props) => {
       />
       <Sidebar {...props} />
       <Content className="content">
-        <Breadcrumb />
-        <div style={{ marginTop: "72px", padding: "1.5rem" }}>
+        {pathname === "/dashboard/patch/details" ? (
+          <PatchBreadcrumb {...props} />
+        ) : (
+          <Breadcrumb {...props} />
+        )}
+        <div
+          style={{
+            marginTop: 72,
+            padding: "24px 48px",
+            width: "100%",
+          }}
+        >
           <Component {...props} />
         </div>
       </Content>

@@ -36,7 +36,6 @@ const Notification = ({ open, onClose, type, message, timeout }) => {
         <p
           style={{
             textAlign: "center",
-            fontFamily: "Circular Std",
             fontSize: "16px",
             lineHeight: "20px",
             color: "#ffffff",

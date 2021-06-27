@@ -1,6 +1,6 @@
 import React from "react";
 import ArrowLeft from "../../assets/icons/arrow-left.png";
-import AlertCircle from "../../assets/icons/info.png";
+import AlertCircle from "../../assets/icons/alert-circle.png";
 
 const MessageBox = (props) => (
   <div className="container">
@@ -10,10 +10,29 @@ const MessageBox = (props) => (
         alt="warning-icon"
         style={{ margin: "0.5em", maxWidth: "8rem" }}
       />
-      <p className="black-title">WARNING</p>
-      <p className="support-description">
+      <p
+        style={{
+          color: "rgb(1, 1, 1)",
+          fontWeight: 700,
+          fontSize: 32,
+          lineHeight: "120%",
+          textTransform: "uppercase",
+          marginTop: 24,
+        }}
+      >
+        WARNING
+      </p>
+      <p
+        style={{
+          padding: 0,
+          margin: "20px 0px",
+          color: "rgb(1, 1, 1)",
+          fontSize: 20,
+          lineHeight: "156%",
+        }}
+      >
         Your account is awaiting for approval. if this does not get resolved in
-        24h please contact us:
+        24h please contact us: <br />
         <span>
           <a
             href="mailto:email_address@domain.com"
