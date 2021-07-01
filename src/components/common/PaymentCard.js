@@ -32,7 +32,7 @@ const PaymentCard = ({ searchActive, searchedSource, dataSource }) => {
     >
       {payments &&
         payments.map((payment, index) => (
-          <>
+          <div key={index + 1}>
             <div className="payment-card" key={`payment-card-` + index + 1}>
               <div
                 style={{
@@ -257,7 +257,7 @@ const PaymentCard = ({ searchActive, searchedSource, dataSource }) => {
                 </div>
               </div>
             )}
-          </>
+          </div>
         ))}
       {showEditPayment && (
         <EditPayment

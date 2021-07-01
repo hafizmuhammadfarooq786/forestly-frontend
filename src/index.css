@@ -58,6 +58,17 @@ span[aria-label="eye"] {
   color: rgba(1, 1, 1, 0.4) !important;
 }
 
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
 span[aria-label="caret-up"],
 span[aria-label="caret-down"] {
   color: #01010140 !important;
@@ -132,6 +143,15 @@ p{
   flex-direction: column !important;
   justify-content: center !important;
   align-items: center !important;
+}
+.pulse-loader{
+   display: contents !important;
+}
+.pulse-loader>div{
+  background: none;
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
 }
 
 

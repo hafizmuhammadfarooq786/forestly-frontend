@@ -16,6 +16,7 @@ const Selector = ({ source, option }) => {
         style={{
           background: "#ffffff",
           display: "flex",
+          alignItems: "center",
           width: "auto",
           borderRadius: 100,
           boxShadow: "0px 2px 8px rgba(0, 0, 0, 0.12)",
@@ -30,9 +31,9 @@ const Selector = ({ source, option }) => {
             src={ArrowUp}
             alt="arrow-up"
             style={{
-              margin: "0 16px",
-              height: 24,
-              width: 24,
+              marginLeft: 8,
+              height: 26,
+              width: 26,
             }}
           />
         ) : (
@@ -40,9 +41,9 @@ const Selector = ({ source, option }) => {
             src={ArrowDown}
             alt="arrow-down"
             style={{
-              margin: "0 16px",
-              height: 24,
-              width: 24,
+              marginLeft: 8,
+              height: 26,
+              width: 26,
             }}
           />
         )}

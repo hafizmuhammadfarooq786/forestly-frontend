@@ -12,7 +12,6 @@ const SearchBar = ({
 }) => {
   const [showCross, setShowCross] = useState(false);
   const [searchInput, setSearchInput] = useState("");
-  console.log(searchFor);
 
   // clear search input and hide cross icon
   const clearSearch = () => {

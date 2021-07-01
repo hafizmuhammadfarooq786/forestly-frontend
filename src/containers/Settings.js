@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Form, Input } from "antd";
-import ComponentLoading from "../components/common/ComponentLoading";
+import LoaderGif from "../components/common/LoaderGif";
 import SettingsTabs from "../components/common/SettingsTabs";
 import LoadingFormButton from "../components/common/LoadingFormButton";
 
@@ -54,7 +54,7 @@ const Settings = () => {
     setPageLoading(false);
   };
   const stopPageLoading = () => {
-    setTimeout(finishLoading, 1000);
+    setTimeout(finishLoading, 2000);
   };
 
   const settingsData = {
@@ -79,329 +79,328 @@ const Settings = () => {
     stopPageLoading();
   }, []);
 
-  return (
-    <ComponentLoading active={pageLoading}>
-      <div
+  return pageLoading ? (
+    <LoaderGif />
+  ) : (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "start",
+        alignItems: "start",
+        width: "100%",
+        marginTop: 16,
+      }}
+    >
+      <h2 style={{ color: "#274B28" }}>Account Settings</h2>
+      <p
         style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "start",
-          alignItems: "start",
-          width: "100%",
-          marginTop: 16,
+          color: "#757575",
+          margin: "12px 0",
+          fontSize: 18,
+          lineHeight: "24px",
         }}
       >
-        <h2 style={{ color: "#274B28" }}>Account Settings</h2>
-        <p
-          style={{
-            color: "#757575",
-            margin: "12px 0",
-            fontSize: 18,
-            lineHeight: "24px",
-          }}
-        >
-          Change your profile and account settings
-        </p>
+        Change your profile and account settings
+      </p>
 
-        <div
-          style={{
-            background: "#ffffff",
-            borderRadius: 8,
-            boxShadow: "0px 1px 8px rgba(0, 0, 0, 0.12)",
-            width: "100%",
-            height: 520,
-            marginTop: 24,
-          }}
-        >
-          <div style={{ display: "flex", height: "100%" }}>
-            <SettingsTabs
-              tabs={["Account", "Password"]}
-              setTabName={(name) => setActiveTabName(name)}
-            />
+      <div
+        style={{
+          background: "#ffffff",
+          borderRadius: 8,
+          boxShadow: "0px 1px 8px rgba(0, 0, 0, 0.12)",
+          width: "100%",
+          height: 520,
+          marginTop: 24,
+        }}
+      >
+        <div style={{ display: "flex", height: "100%" }}>
+          <SettingsTabs
+            tabs={["Account", "Password"]}
+            setTabName={(name) => setActiveTabName(name)}
+          />
 
-            <div
-              style={{
-                borderLeft: "1px solid #EEEEEE",
-                padding: 32,
-                width: "100%",
-                height: "100%",
-              }}
-            >
-              {activeTabName === "account" && (
-                <div
-                  className="settings-main"
-                  style={{ height: "100%", position: "relative" }}
+          <div
+            style={{
+              borderLeft: "1px solid #EEEEEE",
+              padding: 32,
+              width: "100%",
+              height: "100%",
+            }}
+          >
+            {activeTabName === "account" && (
+              <div
+                className="settings-main"
+                style={{ height: "100%", position: "relative" }}
+              >
+                <h3 style={{ color: "#274B28", marginTop: 16 }}>
+                  Basic Information
+                </h3>
+                <Form
+                  ref={formRef}
+                  layout="vertical"
+                  style={{ width: "100%", marginTop: 30 }}
+                  onFinish={onFinishSettings}
+                  onFinishFailed={onFinishFailed}
                 >
-                  <h3 style={{ color: "#274B28", marginTop: 16 }}>
-                    Basic Information
-                  </h3>
-                  <Form
-                    ref={formRef}
-                    layout="vertical"
-                    style={{ width: "100%", marginTop: 30 }}
-                    onFinish={onFinishSettings}
-                    onFinishFailed={onFinishFailed}
+                  <div
+                    style={{ display: "flex", width: "100%", marginTop: 12 }}
                   >
-                    <div
-                      style={{ display: "flex", width: "100%", marginTop: 12 }}
+                    <Form.Item
+                      className="settings-form-item"
+                      style={{ marginRight: 16 }}
+                      label={
+                        <label className="settings-label">First name</label>
+                      }
+                      name="first_name"
+                      initialValue={settingsData.first_name}
+                      rules={[
+                        {
+                          required: true,
+                          message: "First name is required",
+                        },
+                      ]}
+                      required={false}
                     >
-                      <Form.Item
-                        className="settings-form-item"
-                        style={{ marginRight: 16 }}
-                        label={
-                          <label className="settings-label">First name</label>
-                        }
-                        name="first_name"
-                        initialValue={settingsData.first_name}
-                        rules={[
-                          {
-                            required: true,
-                            message: "First name is required",
-                          },
-                        ]}
-                        required={false}
-                      >
-                        <Input
-                          type="text"
-                          className="settings-value"
-                          onChange={(e) => {
-                            e.target.value.localeCompare(
-                              settingsData.first_name
-                            ) !== 0
-                              ? setEnabled({ ...enabled, first_name: true })
-                              : setEnabled({ ...enabled, first_name: false });
-                          }}
-                        />
-                      </Form.Item>
-                      <Form.Item
-                        className="settings-form-item"
-                        label={
-                          <label className="settings-label">Last name</label>
-                        }
-                        name="last_name"
-                        initialValue={settingsData.last_name}
-                        rules={[
-                          {
-                            required: true,
-                            message: "Last name is required",
-                          },
-                        ]}
-                        required={false}
-                      >
-                        <Input
-                          type="text"
-                          className="settings-value"
-                          onChange={(e) => {
-                            e.target.value.localeCompare(
-                              settingsData.last_name
-                            ) !== 0
-                              ? setEnabled({ ...enabled, last_name: true })
-                              : setEnabled({ ...enabled, last_name: false });
-                          }}
-                        />
-                      </Form.Item>
-                    </div>
-
-                    <div
-                      style={{
-                        display: "flex",
-                        width: "50%",
-                        marginRight: 16,
-                        marginTop: 12,
-                      }}
-                    >
-                      <Form.Item
-                        className="settings-form-item"
-                        label={<label className="settings-label">Email</label>}
-                        name="email"
-                        initialValue={settingsData.email}
-                        rules={[
-                          {
-                            required: true,
-                            message: "Please enter valid email address",
-                          },
-                        ]}
-                        required={false}
-                      >
-                        <Input
-                          type="email"
-                          className="settings-value"
-                          onChange={(e) => {
-                            e.target.value.localeCompare(settingsData.email) !==
-                            0
-                              ? setEnabled({ ...enabled, email: true })
-                              : setEnabled({ ...enabled, email: false });
-                          }}
-                        />
-                      </Form.Item>
-                    </div>
-
-                    <div
-                      style={{
-                        position: "absolute",
-                        bottom: 24,
-                        right: 24,
-                      }}
-                    >
-                      <LoadingFormButton
-                        submitting={submitting}
-                        status={enablingStatus(enabled)}
-                        label="Save Changes"
-                        style={{ maxWidth: 220 }}
-                        className={
-                          enablingStatus(enabled)
-                            ? "update-button-disable"
-                            : "update-button"
-                        }
+                      <Input
+                        type="text"
+                        className="settings-value"
+                        onChange={(e) => {
+                          e.target.value.localeCompare(
+                            settingsData.first_name
+                          ) !== 0
+                            ? setEnabled({ ...enabled, first_name: true })
+                            : setEnabled({ ...enabled, first_name: false });
+                        }}
                       />
-                    </div>
-                  </Form>
-                </div>
-              )}
+                    </Form.Item>
+                    <Form.Item
+                      className="settings-form-item"
+                      label={
+                        <label className="settings-label">Last name</label>
+                      }
+                      name="last_name"
+                      initialValue={settingsData.last_name}
+                      rules={[
+                        {
+                          required: true,
+                          message: "Last name is required",
+                        },
+                      ]}
+                      required={false}
+                    >
+                      <Input
+                        type="text"
+                        className="settings-value"
+                        onChange={(e) => {
+                          e.target.value.localeCompare(
+                            settingsData.last_name
+                          ) !== 0
+                            ? setEnabled({ ...enabled, last_name: true })
+                            : setEnabled({ ...enabled, last_name: false });
+                        }}
+                      />
+                    </Form.Item>
+                  </div>
 
-              {activeTabName === "password" && (
-                <div
-                  className="settings-main"
-                  style={{ height: "100%", position: "relative" }}
+                  <div
+                    style={{
+                      display: "flex",
+                      width: "50%",
+                      marginRight: 16,
+                      marginTop: 12,
+                    }}
+                  >
+                    <Form.Item
+                      className="settings-form-item"
+                      label={<label className="settings-label">Email</label>}
+                      name="email"
+                      initialValue={settingsData.email}
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please enter valid email address",
+                        },
+                      ]}
+                      required={false}
+                    >
+                      <Input
+                        type="email"
+                        className="settings-value"
+                        onChange={(e) => {
+                          e.target.value.localeCompare(settingsData.email) !== 0
+                            ? setEnabled({ ...enabled, email: true })
+                            : setEnabled({ ...enabled, email: false });
+                        }}
+                      />
+                    </Form.Item>
+                  </div>
+
+                  <div
+                    style={{
+                      position: "absolute",
+                      bottom: 24,
+                      right: 24,
+                    }}
+                  >
+                    <LoadingFormButton
+                      submitting={submitting}
+                      status={enablingStatus(enabled)}
+                      label="Save Changes"
+                      style={{ maxWidth: 220 }}
+                      className={
+                        enablingStatus(enabled)
+                          ? "update-button-disable"
+                          : "update-button"
+                      }
+                    />
+                  </div>
+                </Form>
+              </div>
+            )}
+
+            {activeTabName === "password" && (
+              <div
+                className="settings-main"
+                style={{ height: "100%", position: "relative" }}
+              >
+                <h3 style={{ color: "#274B28", marginTop: 16 }}>
+                  Change Password
+                </h3>
+                <Form
+                  ref={formRef}
+                  layout="vertical"
+                  style={{ width: "100%", marginTop: 30 }}
+                  onFinish={onFinishPassword}
+                  onFinishFailed={onFinishFailed}
                 >
-                  <h3 style={{ color: "#274B28", marginTop: 16 }}>
-                    Change Password
-                  </h3>
-                  <Form
-                    ref={formRef}
-                    layout="vertical"
-                    style={{ width: "100%", marginTop: 30 }}
-                    onFinish={onFinishPassword}
-                    onFinishFailed={onFinishFailed}
-                  >
-                    <div style={{ display: "flex", width: "100%" }}>
-                      <Form.Item
-                        className="settings-form-item"
-                        style={{ marginRight: 16 }}
-                        label={
-                          <label className="settings-label">Old Password</label>
-                        }
-                        name="old_password"
-                        initialValue={""}
-                        rules={[
-                          {
-                            required: true,
-                            message: "Old password is required",
-                          },
-                        ]}
-                        required={false}
-                      >
-                        <Input.Password
-                          placeholder="Old password"
-                          className="settings-value"
-                          onChange={(e) => {
-                            e.target.value.length > 0
-                              ? setEnabledForPassword({
-                                  ...enabledForPassword,
-                                  old_password: true,
-                                })
-                              : setEnabledForPassword({
-                                  ...enabledForPassword,
-                                  old_password: false,
-                                });
-                          }}
-                        />
-                      </Form.Item>
-                      <Form.Item
-                        className="settings-form-item"
-                        label={
-                          <label className="settings-label">New Password</label>
-                        }
-                        name="new_password"
-                        initialValue={""}
-                        rules={[
-                          {
-                            required: true,
-                            message: "New password is required",
-                          },
-                        ]}
-                        required={false}
-                      >
-                        <Input.Password
-                          placeholder="New password"
-                          className="settings-value"
-                          onChange={(e) => {
-                            e.target.value.length > 0
-                              ? setEnabledForPassword({
-                                  ...enabledForPassword,
-                                  new_password: true,
-                                })
-                              : setEnabledForPassword({
-                                  ...enabledForPassword,
-                                  new_password: false,
-                                });
-                          }}
-                        />
-                      </Form.Item>
-                    </div>
-                    <div style={{ display: "flex", width: "49%" }}>
-                      <Form.Item
-                        className="settings-form-item"
-                        label={
-                          <label className="settings-label">
-                            Confirm New Password
-                          </label>
-                        }
-                        name="confirm_password"
-                        initialValue={""}
-                        rules={[
-                          {
-                            required: true,
-                            message:
-                              "Please re-enter your new password which is required",
-                          },
-                        ]}
-                        required={false}
-                      >
-                        <Input.Password
-                          placeholder="Confirm new password"
-                          className="settings-value"
-                          onChange={(e) => {
-                            e.target.value.length > 0
-                              ? setEnabledForPassword({
-                                  ...enabledForPassword,
-                                  confirm_password: true,
-                                })
-                              : setEnabledForPassword({
-                                  ...enabledForPassword,
-                                  confirm_password: false,
-                                });
-                          }}
-                        />
-                      </Form.Item>
-                    </div>
-                    <div
-                      style={{
-                        position: "absolute",
-                        bottom: 24,
-                        right: 24,
-                      }}
+                  <div style={{ display: "flex", width: "100%" }}>
+                    <Form.Item
+                      className="settings-form-item"
+                      style={{ marginRight: 16 }}
+                      label={
+                        <label className="settings-label">Old Password</label>
+                      }
+                      name="old_password"
+                      initialValue={""}
+                      rules={[
+                        {
+                          required: true,
+                          message: "Old password is required",
+                        },
+                      ]}
+                      required={false}
                     >
-                      <LoadingFormButton
-                        submitting={submitting}
-                        status={enablingStatusForPassword(enabledForPassword)}
-                        label="Save Changes"
-                        style={{ maxWidth: 220 }}
-                        className={
-                          enablingStatusForPassword(enabledForPassword)
-                            ? "update-button-disable"
-                            : "update-button"
-                        }
+                      <Input.Password
+                        placeholder="Old password"
+                        className="settings-value"
+                        onChange={(e) => {
+                          e.target.value.length > 0
+                            ? setEnabledForPassword({
+                                ...enabledForPassword,
+                                old_password: true,
+                              })
+                            : setEnabledForPassword({
+                                ...enabledForPassword,
+                                old_password: false,
+                              });
+                        }}
                       />
-                    </div>
-                  </Form>
-                </div>
-              )}
-            </div>
+                    </Form.Item>
+                    <Form.Item
+                      className="settings-form-item"
+                      label={
+                        <label className="settings-label">New Password</label>
+                      }
+                      name="new_password"
+                      initialValue={""}
+                      rules={[
+                        {
+                          required: true,
+                          message: "New password is required",
+                        },
+                      ]}
+                      required={false}
+                    >
+                      <Input.Password
+                        placeholder="New password"
+                        className="settings-value"
+                        onChange={(e) => {
+                          e.target.value.length > 0
+                            ? setEnabledForPassword({
+                                ...enabledForPassword,
+                                new_password: true,
+                              })
+                            : setEnabledForPassword({
+                                ...enabledForPassword,
+                                new_password: false,
+                              });
+                        }}
+                      />
+                    </Form.Item>
+                  </div>
+                  <div style={{ display: "flex", width: "49%" }}>
+                    <Form.Item
+                      className="settings-form-item"
+                      label={
+                        <label className="settings-label">
+                          Confirm New Password
+                        </label>
+                      }
+                      name="confirm_password"
+                      initialValue={""}
+                      rules={[
+                        {
+                          required: true,
+                          message:
+                            "Please re-enter your new password which is required",
+                        },
+                      ]}
+                      required={false}
+                    >
+                      <Input.Password
+                        placeholder="Confirm new password"
+                        className="settings-value"
+                        onChange={(e) => {
+                          e.target.value.length > 0
+                            ? setEnabledForPassword({
+                                ...enabledForPassword,
+                                confirm_password: true,
+                              })
+                            : setEnabledForPassword({
+                                ...enabledForPassword,
+                                confirm_password: false,
+                              });
+                        }}
+                      />
+                    </Form.Item>
+                  </div>
+                  <div
+                    style={{
+                      position: "absolute",
+                      bottom: 24,
+                      right: 24,
+                    }}
+                  >
+                    <LoadingFormButton
+                      submitting={submitting}
+                      status={enablingStatusForPassword(enabledForPassword)}
+                      label="Save Changes"
+                      style={{ maxWidth: 220 }}
+                      className={
+                        enablingStatusForPassword(enabledForPassword)
+                          ? "update-button-disable"
+                          : "update-button"
+                      }
+                    />
+                  </div>
+                </Form>
+              </div>
+            )}
           </div>
         </div>
       </div>
-    </ComponentLoading>
+    </div>
   );
 };
 

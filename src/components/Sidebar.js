@@ -235,13 +235,14 @@ const Sidebar = (props) => {
         </div>
         <p
           style={{
-            marginLeft: "80%",
             letterSpacing: 1,
             fontWeight: 700,
             fontSize: "10px",
             color: "white",
             position: "absolute",
-            bottom: "-1em",
+            bottom: 8,
+            right: 16,
+            margin: 0,
           }}
         >
           v 1.0.0

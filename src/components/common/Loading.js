@@ -1,6 +1,7 @@
 import React from "react";
 import LoadingOverlay from "react-loading-overlay";
-import { HashLoader } from "react-spinners";
+// import { HashLoader } from "react-spinners";
+import LoadingImageGif from "../../assets/loader.gif";
 
 const Loading = (props) => (
   <div
@@ -16,7 +17,9 @@ const Loading = (props) => (
     <LoadingOverlay
       active
       className="loader"
-      spinner={<HashLoader size={90} color="#274B28" />}
+      spinner={
+        <img src={LoadingImageGif} alt="loading-gif" height={200} width={200} />
+      }
     >
       {props.children}
     </LoadingOverlay>
