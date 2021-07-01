@@ -173,6 +173,7 @@ const EditPayment = ({ source, paymentID, visible, onClose }) => {
                         alt={BackArrow}
                         height={24}
                         width={24}
+                        style={{ cursor: "pointer" }}
                         onClick={() => onGoBack()}
                       />
                       <h2
