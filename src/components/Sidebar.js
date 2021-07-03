@@ -53,14 +53,10 @@ const Sidebar = (props) => {
       >
         <div
           style={{
-            paddingLeft: 32,
+            padding: "24px 0 56px 32px",
           }}
         >
-          <img
-            src={LogoTextual}
-            alt="forest-logo"
-            style={{ marginTop: 48, marginBottom: 48 }}
-          />
+          <img src={LogoTextual} alt="forest-logo" />
         </div>
         <StyledLink
           to="/dashboard/home"
