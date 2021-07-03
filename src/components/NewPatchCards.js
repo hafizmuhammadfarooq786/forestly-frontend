@@ -4,7 +4,6 @@ import ViewDetailsIcon from "../assets/icons/open-in-new.svg";
 import CartPlus from "../assets/icons/cart-plus.svg";
 
 const NewPatchCards = ({ dataSource }) => {
-  console.log(dataSource);
   return (
     dataSource && (
       <>

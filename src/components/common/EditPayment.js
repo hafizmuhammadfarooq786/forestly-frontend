@@ -78,7 +78,6 @@ const EditPayment = ({ source, paymentID, visible, onClose }) => {
   };
 
   const onUpdateCardDetails = async (values) => {
-    console.log(values);
     onUpdateSuccess(values);
   };
 
