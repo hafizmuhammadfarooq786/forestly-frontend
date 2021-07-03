@@ -30,6 +30,7 @@ function SliderContent({ activeIndex, sliderImage }) {
                 width: "100%",
                 height: "100%",
                 display: "flex",
+                borderRadius: 8,
                 justifyContent: "space-between",
                 alignItems: "start",
                 background:

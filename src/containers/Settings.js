@@ -82,27 +82,20 @@ const Settings = () => {
   return pageLoading ? (
     <LoaderGif />
   ) : (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "start",
-        alignItems: "start",
-        width: "100%",
-        marginTop: 16,
-      }}
-    >
-      <h2 style={{ color: "#274B28" }}>Account Settings</h2>
-      <p
-        style={{
-          color: "#757575",
-          margin: "12px 0",
-          fontSize: 18,
-          lineHeight: "24px",
-        }}
-      >
-        Change your profile and account settings
-      </p>
+    <div className="content-body">
+      <div style={{ display: "flex", flexDirection: "column", width: "100%" }}>
+        <h2 style={{ color: "#274B28" }}>Account Settings</h2>
+        <p
+          style={{
+            color: "#757575",
+            margin: "12px 0",
+            fontSize: 16,
+            lineHeight: "20px",
+          }}
+        >
+          Change your profile and account settings
+        </p>
+      </div>
 
       <div
         style={{

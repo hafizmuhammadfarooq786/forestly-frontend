@@ -35,15 +35,7 @@ const Payments = () => {
   return pageLoading ? (
     <LoaderGif />
   ) : data ? (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "start",
-        alignItems: "center",
-        width: "100%",
-      }}
-    >
+    <div className="content-body">
       <div style={{ display: "flex", width: "100%" }}>
         <SearchBar
           searchFor={`patches-screen`}

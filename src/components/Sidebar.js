@@ -237,12 +237,13 @@ const Sidebar = (props) => {
           style={{
             letterSpacing: 1,
             fontWeight: 700,
-            fontSize: "10px",
-            color: "white",
+            fontSize: 12,
+            color: "#ffffff",
             position: "absolute",
             bottom: 8,
             right: 16,
             margin: 0,
+            opacity: 0.5,
           }}
         >
           v 1.0.0

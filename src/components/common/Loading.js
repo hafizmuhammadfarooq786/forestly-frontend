@@ -18,7 +18,7 @@ const Loading = (props) => (
       active
       className="loader"
       spinner={
-        <img src={LoadingImageGif} alt="loading-gif" height={200} width={200} />
+        <img src={LoadingImageGif} alt="loading-gif" height={140} width={140} />
       }
     >
       {props.children}

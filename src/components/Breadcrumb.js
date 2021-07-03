@@ -66,7 +66,7 @@ const Breadcrumb = (props) => {
           <div
             style={{
               background: "#F1FFF2",
-              padding: 23,
+              padding: "22px 24px",
               width: 215,
               display: "flex",
               justifyContent: "space-between",
@@ -75,7 +75,7 @@ const Breadcrumb = (props) => {
           >
             <img src={CartIcon} alt="CartIcon" height={24} width={24} />
             <h3 style={{ color: "#274B28" }}>{`Your Cart`}</h3>
-            <img src={ArrowRight} alt="ArrowRight" height={24} width={24} />
+            <img src={ArrowRight} alt="ArrowRight" height={28} width={28} />
           </div>
         </div>
       </StyledLink>

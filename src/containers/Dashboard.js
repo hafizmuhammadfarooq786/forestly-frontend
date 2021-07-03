@@ -45,7 +45,7 @@ const Dashboard = () => {
     setPageLoading(false);
   };
   const stopPageLoading = () => {
-    setTimeout(finishLoading, 2000);
+    setTimeout(finishLoading, 3000);
   };
 
   const selectorSource = [
@@ -110,15 +110,7 @@ const Dashboard = () => {
   return pageLoading ? (
     <LoaderGif />
   ) : data ? (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "start",
-        height: "100%",
-        width: "100%",
-      }}
-    >
+    <div className="content-body">
       <div
         style={{
           display: "flex",

@@ -1,6 +1,5 @@
 import React from "react";
 import { Row, Col } from "antd";
-import Logo from "../../assets/logo.png";
 import LogoTextual from "../../assets/logo.svg";
 
 const FormContainer = (props) => {
@@ -16,8 +15,11 @@ const FormContainer = (props) => {
           backgroundColor: "#274B28",
         }}
       >
-        <img src={Logo} alt="forest-logo" style={{ height: 220, width: 220 }} />
-        <img src={LogoTextual} alt="forest-logo" style={{ marginTop: 32 }} />
+        <img
+          src={LogoTextual}
+          alt="forest-logo"
+          style={{ height: 140, width: 480 }}
+        />
       </Col>
       <Col
         span={8}

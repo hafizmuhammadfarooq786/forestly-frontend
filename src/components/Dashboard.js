@@ -38,8 +38,6 @@ const Dashboard = (props) => {
         )}
         <div
           style={{
-            marginTop: 72,
-            padding: "24px 48px",
             width: "100%",
           }}
         >
