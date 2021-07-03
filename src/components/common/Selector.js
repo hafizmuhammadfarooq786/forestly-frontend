@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import ArrowDown from "../../assets/icons/chevron-down.svg";
 import ArrowUp from "../../assets/icons/chevron-up.svg";
 
-const Selector = ({ source, option }) => {
+const Selector = ({ source, option, onRight }) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [dropdownIndex, setDropdownIndex] = useState(0);
   const onHandleChange = (index, selectedOpt) => {
@@ -54,10 +54,12 @@ const Selector = ({ source, option }) => {
           style={{
             position: "absolute",
             background: "#ffffff",
+            right: onRight ? 0 : null,
             width: 344,
             borderRadius: 8,
             padding: "8px 0",
             marginTop: 16,
+            zIndex: 10,
             boxShadow: "0px 1px 18px rgba(0, 0, 0, 0.12)",
           }}
         >

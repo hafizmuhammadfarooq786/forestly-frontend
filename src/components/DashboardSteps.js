@@ -1,6 +1,7 @@
 import React from "react";
 import Dashboard from "../containers/Dashboard";
 import Patches from "../containers/Patches";
+import NewPatches from "../containers/NewPatches";
 import PatchDetails from "../containers/PatchDetails";
 import Payments from "../containers/Payments";
 import Settings from "../containers/Settings";
@@ -23,13 +24,22 @@ const PatchesStep = {
     Component: (props) => <Patches {...props} />,
   },
 };
+const NewPatchesStep = {
+  id: "newPatches",
+  step: {
+    id: "newPatches",
+    path: "/dashboard/patches/new",
+    label: "New Patches",
+    Component: (props) => <NewPatches {...props} />,
+  },
+};
 
 const PatchDetailsStep = {
   id: "patchesDetails",
   step: {
     id: "patchesDetails",
     path: "/dashboard/patch/details",
-    label: "Patches",
+    label: "Patches Details",
     Component: (props) => <PatchDetails {...props} />,
   },
 };
@@ -55,6 +65,7 @@ const SettingsStep = {
 const AllSteps = [
   HomeStep,
   PatchesStep,
+  NewPatchesStep,
   PaymentsStep,
   SettingsStep,
   PatchDetailsStep,

@@ -6,6 +6,7 @@ import PatchCard from "../components/common/PatchCard";
 import NoDataIllustration from "../assets/illustration/undraw_a_moment_to_relax_bbpa.svg";
 import PlusIcon from "../assets/icons/plus-circle-outline.svg";
 import PatchDetails from "../components/common/PatchDetails";
+import { history } from "../index";
 
 const Patches = () => {
   const [pageLoading, setPageLoading] = useState(false);
@@ -55,6 +56,10 @@ const Patches = () => {
             height: 64,
             marginLeft: 16,
             boxShadow: "0px 1px 8px rgba(0, 0, 0, 0.12)",
+            cursor: "pointer",
+          }}
+          onClick={() => {
+            history.push("/dashboard/patches/new");
           }}
         >
           <img src={PlusIcon} alt="PlusIcon" height={24} width={24} />
