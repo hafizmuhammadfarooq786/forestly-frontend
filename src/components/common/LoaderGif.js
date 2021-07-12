@@ -13,7 +13,7 @@ const LoadingGif = () => (
       backgroundColor: "#fffff",
     }}
   >
-    <img src={LoadingImageGif} alt="loading-gif" height={140} width={140} />
+    <img src={LoadingImageGif} alt="loading-gif" height={80} width={80} />
   </div>
 );
 

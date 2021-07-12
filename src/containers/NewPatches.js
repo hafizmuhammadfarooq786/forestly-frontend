@@ -10,13 +10,18 @@ const NewPatches = () => {
   const [pageLoading, setPageLoading] = useState(false);
   const [data, setData] = useState();
   const [selectedOption, setSelectedOption] = useState(null);
-  const chunk = (arr, size) =>
-    arr.reduce(
-      (acc, e, i) => (
-        i % size ? acc[acc.length - 1].push(e) : acc.push([e]), acc
-      ),
-      []
-    );
+
+  const chunk = (myArray, chunk_size) => {
+    var index = 0;
+    var arrayLength = myArray.length;
+    var tempArray = [];
+    for (index = 0; index < arrayLength; index += chunk_size) {
+      const myChunk = myArray.slice(index, index + chunk_size);
+      tempArray.push(myChunk);
+    }
+
+    return tempArray;
+  };
 
   const noData = {
     title: "No Forest Units",

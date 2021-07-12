@@ -1,4 +1,4 @@
-# Foreset.ly Frontend
+# Foresetly Front-end Codebase
 
 This repository contains the codebase for forest.ly web app.
 

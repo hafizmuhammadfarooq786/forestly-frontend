@@ -147,7 +147,6 @@ const PaymentCard = ({ searchActive, searchedSource, dataSource }) => {
                       onClick={() => {
                         setPaymentId(payment.id);
                         setShowPaymentHistory(true);
-                        console.log("show history");
                       }}
                     >
                       <img src={Receipt} alt={Receipt} height={24} width={24} />

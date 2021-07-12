@@ -113,7 +113,7 @@ const EditPayment = ({ source, paymentID, visible, onClose }) => {
     if (updateAreaValue) {
       stopLoading();
       const calculatePayment = area * 2;
-      setUpdateSource([...updateSource, (updateSource[idx].area = area)]);
+      setUpdateSource([updateSource, (updateSource[idx].area = area)]);
       setUpdateSource([
         ...updateSource,
         (updateSource[idx].payable = calculatePayment),
