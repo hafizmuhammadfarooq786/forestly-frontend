@@ -4,6 +4,8 @@ import { Redirect } from "react-router-dom";
 import { Layout } from "antd";
 import Sidebar from "./Sidebar";
 import PatchBreadcrumb from "./PatchBreadcrumb";
+import NewPatchesBreadcrumb from "./NewPatchesBreadcrumb";
+import CartBreadcrumb from "./CartBreadcrumb";
 import Breadcrumb from "./Breadcrumb";
 import AllSteps from "./DashboardSteps";
 import { removeNotification } from "../store/app/actions";
@@ -21,6 +23,35 @@ const Dashboard = (props) => {
     return <Redirect to="/404" />;
   }
 
+  const checkPath = () => {
+    if (pathname === "/dashboard/home") {
+      return true;
+    } else if (pathname === "/dashboard/patches") {
+      return true;
+    } else if (pathname === "/dashboard/payments") {
+      return true;
+    } else if (pathname === "/dashboard/settings") {
+      return true;
+    }
+  };
+
+  const checkForNewForestPaths = () => {
+    if (pathname === "/dashboard/patches/new") {
+      return true;
+    } else if (pathname === "/dashboard/patches/new/details") {
+      return true;
+    }
+  };
+
+  const checkForCartPaths = () => {
+    if (pathname === "/dashboard/patches/cart/review") {
+      return true;
+    } else if (pathname === "/dashboard/patches/cart/personal-information") {
+      return true;
+    } else if (pathname === "/dashboard/patches/cart/payment") {
+      return true;
+    }
+  };
   const { Component } = step.step;
 
   return (
@@ -29,13 +60,17 @@ const Dashboard = (props) => {
         {...notification}
         onClose={() => dispatch(removeNotification())}
       />
-      <Sidebar {...props} />
-      <Content className="content">
-        {pathname === "/dashboard/patch/details" ? (
+      {!checkForCartPaths() && <Sidebar {...props} />}
+      <Content className={checkForCartPaths() ? "content-for-card" : "content"}>
+        {pathname === "/dashboard/patch/details" && (
           <PatchBreadcrumb {...props} />
-        ) : (
-          <Breadcrumb {...props} />
         )}
+
+        {checkPath() && <Breadcrumb {...props} />}
+
+        {checkForNewForestPaths() && <NewPatchesBreadcrumb {...props} />}
+
+        {checkForCartPaths() && <CartBreadcrumb {...props} />}
         <div
           style={{
             width: "100%",

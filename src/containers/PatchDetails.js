@@ -3,15 +3,18 @@ import LoaderGif from "../components/common/LoaderGif";
 import NoData from "../components/common/NoData";
 import NoDataIllustration from "../assets/illustration/undraw_a_moment_to_relax_bbpa.svg";
 import PatchData from "../components/common/PatchDetails";
+import NewPatchDetails from "../components/common/NewPatchDetails";
 import LargeSlider from "../components/common/large-carousel/Slider";
 import MapWithCircles from "../assets/graph-images/map-with-circles.svg";
 import Tooltip from "../assets/illustration/tooltip.svg";
 import Slider from "../components/common/patch-details-carousel/Slider";
+import MapView from "../assets/illustration/map-view.jpg";
+import MapCheckOutline from "../assets/icons/map-check-outline.svg";
+import Iceland from "../assets/icons/island.svg";
 
-const PatchDetails = () => {
+const PatchDetails = ({ newPatch }) => {
   const [pageLoading, setPageLoading] = useState(false);
   const [patches, setPatches] = useState(null);
-
   const [data, setData] = useState();
   const patchName = window.localStorage.getItem("patch-name");
 
@@ -33,7 +36,8 @@ const PatchDetails = () => {
   useEffect(() => {
     setPageLoading(true);
     setData(true);
-    setPatches(PatchData);
+    const dataFor = newPatch ? NewPatchDetails : PatchData;
+    setPatches(dataFor);
     stopPageLoading();
   }, []);
   return pageLoading ? (
@@ -45,15 +49,20 @@ const PatchDetails = () => {
           patches.map((patch, index) => (
             <>
               {patch.name === patchName && (
-                <LargeSlider key={`patch-${index + 1}`} dataSource={patch} />
+                <LargeSlider
+                  key={`patch-${index + 1}`}
+                  dataSource={patch}
+                  newPatch={newPatch}
+                />
               )}
             </>
           ))}
       </div>
 
-      {patches &&
+      {!newPatch &&
+        patches &&
         patches.map((patch, index) => (
-          <>
+          <div key={index + 1}>
             {patch.name === patchName && (
               <div
                 style={{
@@ -141,7 +150,121 @@ const PatchDetails = () => {
                 </div>
               </div>
             )}
-          </>
+          </div>
+        ))}
+
+      {newPatch &&
+        patches &&
+        patches.map((patch, index) => (
+          <div key={index + 1}>
+            {patch.name === patchName && (
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  marginTop: 48,
+                  width: "100%",
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    width: "100%",
+                    maxWidth: 768,
+                  }}
+                >
+                  <h2 style={{ color: "#274B28", fontWeight: 900 }}>
+                    Benefits of buying forest patch
+                  </h2>
+                  <p
+                    style={{
+                      color: "#757575",
+                      marginTop: 8,
+                      fontSize: 18,
+                      lineHeight: "23px",
+                    }}
+                  >
+                    You can see detailed breakdown of the positive impacts
+                  </p>
+                  <div
+                    style={{
+                      width: "100%",
+                      background: "#ffffff",
+                      borderRadius: 8,
+                      height: "100%",
+                      padding: "32px 0 8px",
+                    }}
+                  >
+                    {patch.benefits &&
+                      patch.benefits.map((value, index) => (
+                        <div
+                          key={index + 1}
+                          style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "start",
+                            padding: "0px 32px 24px",
+                          }}
+                        >
+                          <div style={{ display: "flex" }}>
+                            <div
+                              style={{
+                                background: value.bgColor,
+                                padding: 16,
+                                borderRadius: 26,
+                              }}
+                            >
+                              {value.imgSrc === "map-check-outline" && (
+                                <img
+                                  src={MapCheckOutline}
+                                  alt={value.imgSrc}
+                                  height={24}
+                                  width={24}
+                                />
+                              )}
+                              {value.imgSrc === "island" && (
+                                <img
+                                  src={Iceland}
+                                  alt={value.imgSrc}
+                                  height={24}
+                                  width={24}
+                                />
+                              )}
+                            </div>
+                            <div
+                              style={{
+                                display: "flex",
+                                flexDirection: "column",
+                                marginLeft: 16,
+                              }}
+                            >
+                              <h3 style={{ color: "#274B28" }}>
+                                {value.title}
+                              </h3>
+                              <p className="small-p" style={{ marginTop: 8 }}>
+                                {value.description}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                  </div>
+                </div>
+                <div
+                  style={{
+                    width: "100%",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <img src={MapView} alt="MapView" height={374} width={478} />
+                </div>
+              </div>
+            )}
+          </div>
         ))}
     </div>
   ) : (

@@ -66,6 +66,10 @@ input::-webkit-inner-spin-button {
   margin: 0;
 }
 
+.ant-switch-checked{
+  background-color: #274B28 !important;
+}
+
 /* Firefox */
 input[type=number] {
   -moz-appearance: textfield;
@@ -182,6 +186,14 @@ p{
   background: #F3F5F3;
 }
 
+.content-for-card {
+  margin: 0;
+  min-height: 100vh;
+  max-width: 100%;
+  margin-left: 0;
+  background: #F3F5F3;
+}
+
 .content-body{
   display: flex;
   flex-direction: column;
@@ -207,6 +219,22 @@ p{
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
+  z-index: 100;
+}
+
+.breadcrumb-for-cart {
+  padding-left: 48px;
+  margin: 0;
+  position: fixed;
+  top: 0;
+  width: calc(100%);
+  background-color: #ffffff;
+  box-shadow: 0 5px 5px rgb(0 0 0 / 30%);
+  height: 72px;
+  display: flex;
+  flex-direction: row;
+  justify-content:center;
   align-items: center;
   z-index: 100;
 }
@@ -527,10 +555,12 @@ label{
 .payment-light-circle-icon{
   border: 1px solid #274B28;
   border-radius: 50%;
-  padding: 12px;
   height: 48px;
   width: 48px;
   cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .overdue{
   background: #F44336;
@@ -602,4 +632,16 @@ span[aria-label="search"] svg {
 }
 .ant-modal-content {
   border-radius: 8px !important;
+}
+
+.trash-icon{
+  background: #FFEBEE;
+  border: 1px solid #F44336;
+  border-radius: 50%;
+  height: 48px;
+  width: 48px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

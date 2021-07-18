@@ -4,9 +4,9 @@ import Dots from "./Dots";
 import Arrows from "./Arrows";
 import "./slider.css";
 
-function Slider({ dataSource }) {
+function Slider({ dataSource, newPatch }) {
   const [activeIndex, setActiveIndex] = useState(0);
-  const len = dataSource.sliders.length - 1;
+  const len = dataSource["sliders"].length - 1;
 
   // useEffect(() => {
   //   const interval = setInterval(() => {
@@ -17,7 +17,11 @@ function Slider({ dataSource }) {
 
   return (
     <div className="large-slider-container">
-      <SliderContent activeIndex={activeIndex} sliderImage={dataSource} />
+      <SliderContent
+        activeIndex={activeIndex}
+        isNew={newPatch}
+        sliderImage={dataSource}
+      />
       <Arrows
         prevSlide={() =>
           setActiveIndex(activeIndex < 1 ? len : activeIndex - 1)

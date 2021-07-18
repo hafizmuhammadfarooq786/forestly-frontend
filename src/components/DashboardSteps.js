@@ -5,6 +5,7 @@ import NewPatches from "../containers/NewPatches";
 import PatchDetails from "../containers/PatchDetails";
 import Payments from "../containers/Payments";
 import Settings from "../containers/Settings";
+import Cart from "../containers/Cart";
 
 const HomeStep = {
   id: "dashboard",
@@ -43,6 +44,15 @@ const PatchDetailsStep = {
     Component: (props) => <PatchDetails {...props} />,
   },
 };
+const NewPatchDetails = {
+  id: "newPatchDetails",
+  step: {
+    id: "newPatchDetails",
+    path: "/dashboard/patches/new/details",
+    label: "New Patch Details",
+    Component: (props) => <PatchDetails newPatch={true} {...props} />,
+  },
+};
 const PaymentsStep = {
   id: "payments",
   step: {
@@ -62,6 +72,36 @@ const SettingsStep = {
   },
 };
 
+const CartStep1 = {
+  id: "review",
+  step: {
+    id: "review",
+    path: "/dashboard/patches/cart/review",
+    label: "Review",
+    Component: (props) => <Cart {...props} />,
+  },
+};
+
+const CartStep2 = {
+  id: "personal-information",
+  step: {
+    id: "personal-information",
+    path: "/dashboard/patches/cart/personal-information",
+    label: "Personal Information",
+    Component: (props) => <Cart {...props} />,
+  },
+};
+
+const CartStep3 = {
+  id: "forest-payment",
+  step: {
+    id: "forest-payment",
+    path: "/dashboard/patches/cart/payment",
+    label: "Forest Payment",
+    Component: (props) => <Cart {...props} />,
+  },
+};
+
 const AllSteps = [
   HomeStep,
   PatchesStep,
@@ -69,6 +109,10 @@ const AllSteps = [
   PaymentsStep,
   SettingsStep,
   PatchDetailsStep,
+  NewPatchDetails,
+  CartStep1,
+  CartStep2,
+  CartStep3,
 ];
 
 export default AllSteps;

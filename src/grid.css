@@ -21,7 +21,7 @@
 
 @media (min-width: 1366px){
     .col{
-        width: 389px !important;
+        width: calc(100%/3) !important;
     }
 }
 @media (min-width:992px) {

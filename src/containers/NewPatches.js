@@ -5,11 +5,17 @@ import NoData from "../components/common/NoData";
 import NoDataIllustration from "../assets/illustration/undraw_a_moment_to_relax_bbpa.svg";
 import NewPatchDetails from "../components/common/NewPatchDetails";
 import NewPatchCards from "../components/NewPatchCards";
+import BuyModal from "../components/common/buy-modal";
 
 const NewPatches = () => {
   const [pageLoading, setPageLoading] = useState(false);
-  const [data, setData] = useState();
+  const [data, setData] = useState(false);
+  const [selectedForest, setSelectedForest] = useState(null);
   const [selectedOption, setSelectedOption] = useState(null);
+
+  const [visible, setVisible] = useState(false);
+  const open = () => setVisible(true);
+  const onClose = () => setVisible(false);
 
   const chunk = (myArray, chunk_size) => {
     var index = 0;
@@ -100,7 +106,23 @@ const NewPatches = () => {
         </div>
       </div>
 
-      <NewPatchCards dataSource={chunk(NewPatchDetails, 3)} />
+      <NewPatchCards
+        setOpen={() => open()}
+        dataSource={chunk(NewPatchDetails, 3)}
+        setSource={(id) => setSelectedForest(id)}
+      />
+
+      <BuyModal
+        visible={visible}
+        source={NewPatchDetails}
+        sourceID={selectedForest}
+        onClose={() => onClose()}
+        afterSubmit={() => {
+          onClose();
+          setPageLoading(true);
+          stopPageLoading();
+        }}
+      />
     </div>
   ) : (
     <NoData source={noData} />
