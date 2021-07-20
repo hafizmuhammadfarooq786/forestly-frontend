@@ -1,28 +1,12 @@
 import React, { useState, useRef } from "react";
 import { Form, Input, Modal, Select } from "antd";
+import { CaretDownOutlined } from "@ant-design/icons";
 import LoadingFormButton from "../LoadingFormButton";
 import ForestIcons from "../ForestIcons";
-import ArrowDown from "../../../assets/icons/chevron-down.svg";
-
-export const DownArrow = ({ clickAction }) => {
-  return (
-    <img
-      src={ArrowDown}
-      alt="arrow-down"
-      style={{
-        height: 28,
-        width: 28,
-        cursor: "pointer",
-        marginTop: "-1rem",
-      }}
-      onClick={clickAction}
-    />
-  );
-};
 
 const EditForestName = (props) => {
   const { showModal, closeModal } = props;
-
+  const [open, setOpen] = useState(false);
   const formRef = useRef();
   const { Option } = Select;
 
@@ -124,7 +108,12 @@ const EditForestName = (props) => {
             >
               <Select
                 className="update-form-select"
-                suffixIcon={<DownArrow />}
+                suffixIcon={
+                  <CaretDownOutlined
+                    style={{ marginTop: -8 }}
+                    onClick={() => setOpen(!open)}
+                  />
+                }
                 defaultValue={
                   <img
                     src={ForestIcons[props.index]}
@@ -133,6 +122,7 @@ const EditForestName = (props) => {
                     width={32}
                   />
                 }
+                open={open}
                 onSelect={(e) => {
                   setEnabled({ ...enabled, icon: true });
                 }}

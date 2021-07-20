@@ -50,6 +50,18 @@ const Dashboard = (props) => {
       return true;
     } else if (pathname === "/dashboard/patches/cart/payment") {
       return true;
+    } else if (pathname === "/dashboard/congratulations") {
+      return true;
+    }
+  };
+
+  const checkForOnlyCartPaths = () => {
+    if (pathname === "/dashboard/patches/cart/review") {
+      return true;
+    } else if (pathname === "/dashboard/patches/cart/personal-information") {
+      return true;
+    } else if (pathname === "/dashboard/patches/cart/payment") {
+      return true;
     }
   };
   const { Component } = step.step;
@@ -70,7 +82,7 @@ const Dashboard = (props) => {
 
         {checkForNewForestPaths() && <NewPatchesBreadcrumb {...props} />}
 
-        {checkForCartPaths() && <CartBreadcrumb {...props} />}
+        {checkForOnlyCartPaths() && <CartBreadcrumb {...props} />}
         <div
           style={{
             width: "100%",

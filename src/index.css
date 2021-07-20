@@ -120,6 +120,10 @@ p{
   line-height: 32px;
   margin: 20px 0 28px;
 }
+.anticon-caret-down svg {
+  height: 16px;
+  width: 16px;
+}
 .small-p{
   font-weight: normal;
   font-size: 14px;

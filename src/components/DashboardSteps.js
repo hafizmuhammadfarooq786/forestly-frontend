@@ -6,6 +6,7 @@ import PatchDetails from "../containers/PatchDetails";
 import Payments from "../containers/Payments";
 import Settings from "../containers/Settings";
 import Cart from "../containers/Cart";
+import Congratulations from "../containers/Congratulations";
 
 const HomeStep = {
   id: "dashboard",
@@ -102,6 +103,15 @@ const CartStep3 = {
   },
 };
 
+const PaymentSuccess = {
+  id: "congratulations",
+  step: {
+    id: "congratulations",
+    path: "/dashboard/congratulations",
+    label: "Congratulations",
+    Component: (props) => <Congratulations {...props} />,
+  },
+};
 const AllSteps = [
   HomeStep,
   PatchesStep,
@@ -113,6 +123,7 @@ const AllSteps = [
   CartStep1,
   CartStep2,
   CartStep3,
+  PaymentSuccess,
 ];
 
 export default AllSteps;

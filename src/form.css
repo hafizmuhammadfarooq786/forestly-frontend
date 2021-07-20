@@ -25,6 +25,14 @@
     height: 56px !important;
     padding: 8px 12px !important;
 }
+.new-payment-form-select>div{
+    background: #FAFAFA !important;
+    border: 1px solid #E0E0E0 !important;
+    border-radius: 8px !important;
+    width: 100% !important;
+    height: 56px !important;
+    padding: 8px 12px !important;
+}
 .update-form .ant-select-arrow{
     top: 65% !important;
     right: 18px !important;

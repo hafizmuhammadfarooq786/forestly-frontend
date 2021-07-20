@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Modal, Form, Input } from "antd";
 import LoadingFormButton from "./../LoadingFormButton";
-import CalendarView from "../../../assets/icons/calendar-multiselect.svg";
+// import CalendarView from "../../../assets/icons/calendar-multiselect.svg";
 import RadioBoxBlank from "../../../assets/icons/radiobox-blank.svg";
 import RadioBoxMarked from "../../../assets/icons/radiobox-marked.svg";
 import PulseLoader from "./../PulseLoader";
@@ -13,7 +13,7 @@ const BuyModal = ({ source, sourceID, visible, onClose }) => {
   const [submitting, setSubmitting] = useState(false);
   const [updateAreaValue, setUpdateAreaValue] = useState(false);
   const [showPulseLoader, setShowPulseLoader] = useState(false);
-  const [paymentPlans, showPaymentPlans] = useState(false);
+  // const [paymentPlans, showPaymentPlans] = useState(false);
   const [planDetails, setPlanDetails] = useState(null);
 
   const [enabled, setEnabled] = useState({
@@ -99,7 +99,7 @@ const BuyModal = ({ source, sourceID, visible, onClose }) => {
           : updateSource[index].payableAnnually,
     };
     CartDetails[0]["forests"].push(cartDetails);
-    showPaymentPlans(false);
+    // showPaymentPlans(false);
     setSubmitting(false);
     setEnabled({
       unitArea: false,
@@ -319,7 +319,7 @@ const BuyModal = ({ source, sourceID, visible, onClose }) => {
                     background: "#F5F5F5",
                   }}
                 >
-                  {!paymentPlans ? (
+                  {/* {!paymentPlans ? (
                     <div
                       style={{
                         display: "flex",
@@ -368,175 +368,173 @@ const BuyModal = ({ source, sourceID, visible, onClose }) => {
                         the relevant payment plans
                       </p>
                     </div>
-                  ) : (
-                    <div
+                  ) : ( */}
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "flex-start",
+                      padding: "20px 26px",
+                      width: "100%",
+                    }}
+                  >
+                    <p
                       style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        justifyContent: "flex-start",
-                        padding: "20px 26px",
-                        width: "100%",
+                        color: "#9E9E9E",
+                        fontSize: 18,
+                        lineHeight: "21px",
+                        margin: 0,
                       }}
                     >
-                      <p
-                        style={{
-                          color: "#9E9E9E",
-                          fontSize: 18,
-                          lineHeight: "21px",
-                          margin: 0,
-                        }}
-                      >
-                        {`2. Select payment plan`}
-                      </p>
+                      {`2. Select payment plan`}
+                    </p>
 
-                      <div
-                        style={{
-                          marginTop: 26,
-                          display: "flex",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                          background: patch.monthlyActive
-                            ? "#F1FFF2"
-                            : "#ffffff",
-                          padding: 16,
-                          borderRadius: 8,
-                          width: "100%",
-                          border: patch.monthlyActive
-                            ? "1px solid #274B28"
-                            : "1px solid #E0E0E0",
-                        }}
-                      >
-                        <div style={{ display: "flex", alignItems: "center" }}>
-                          {patch.monthlyActive ? (
-                            <img
-                              src={RadioBoxMarked}
-                              alt="radi-box-marked"
-                              height={24}
-                              width={24}
-                              onClick={() => {
-                                unselectPlan(index);
-                                setPlanDetails(null);
-                              }}
-                            />
-                          ) : (
-                            <img
-                              src={RadioBoxBlank}
-                              alt="radio-box-blank"
-                              height={24}
-                              width={24}
-                              onClick={() => {
-                                selectPlan(index, true);
-                                setPlanDetails("monthly");
-                              }}
-                            />
-                          )}
-                          <p
-                            style={{
-                              color: "#274B28",
-                              fontSize: 16,
-                              lineHeight: "20px",
-                              margin: "0 0 0 16px",
+                    <div
+                      style={{
+                        marginTop: 26,
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        background: patch.monthlyActive ? "#F1FFF2" : "#ffffff",
+                        padding: 16,
+                        borderRadius: 8,
+                        width: "100%",
+                        border: patch.monthlyActive
+                          ? "1px solid #274B28"
+                          : "1px solid #E0E0E0",
+                      }}
+                    >
+                      <div style={{ display: "flex", alignItems: "center" }}>
+                        {patch.monthlyActive ? (
+                          <img
+                            src={RadioBoxMarked}
+                            alt="radi-box-marked"
+                            height={24}
+                            width={24}
+                            onClick={() => {
+                              unselectPlan(index);
+                              setPlanDetails(null);
                             }}
-                          >
-                            {`Monthly Subscription`}
-                          </p>
-                        </div>
-                        <div style={{ display: "flex", alignItems: "center" }}>
-                          <h5
-                            style={{
-                              color: "#424242",
-                              fontWeight: 800,
+                          />
+                        ) : (
+                          <img
+                            src={RadioBoxBlank}
+                            alt="radio-box-blank"
+                            height={24}
+                            width={24}
+                            onClick={() => {
+                              selectPlan(index, true);
+                              setPlanDetails("monthly");
                             }}
-                          >
-                            {`$ ${patch.payableMonthly || 0}`}
-                          </h5>
-                          <p
-                            style={{
-                              color: "#424242",
-                              fontSize: 16,
-                              lineHeight: "20px",
-                              margin: "0 0 0 8px",
-                            }}
-                          >
-                            {`per month`}
-                          </p>
-                        </div>
+                          />
+                        )}
+                        <p
+                          style={{
+                            color: "#274B28",
+                            fontSize: 16,
+                            lineHeight: "20px",
+                            margin: "0 0 0 16px",
+                          }}
+                        >
+                          {`Monthly Subscription`}
+                        </p>
                       </div>
-                      <div
-                        style={{
-                          marginTop: 26,
-                          display: "flex",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                          background: patch.annuallyActive
-                            ? "#F1FFF2"
-                            : "#ffffff",
-                          padding: 16,
-                          borderRadius: 8,
-                          width: "100%",
-                          border: patch.annuallyActive
-                            ? "1px solid #274B28"
-                            : "1px solid #E0E0E0",
-                        }}
-                      >
-                        <div style={{ display: "flex", alignItems: "center" }}>
-                          {patch.annuallyActive ? (
-                            <img
-                              src={RadioBoxMarked}
-                              alt="radi-box-marked"
-                              height={24}
-                              width={24}
-                              onClick={() => {
-                                unselectPlan(index);
-                                setPlanDetails(null);
-                              }}
-                            />
-                          ) : (
-                            <img
-                              src={RadioBoxBlank}
-                              alt="radio-box-blank"
-                              height={24}
-                              width={24}
-                              onClick={() => {
-                                selectPlan(index);
-                                setPlanDetails("annual");
-                              }}
-                            />
-                          )}
-                          <p
-                            style={{
-                              color: "#274B28",
-                              fontSize: 16,
-                              lineHeight: "20px",
-                              margin: "0 0 0 16px",
-                            }}
-                          >
-                            {`Annual Subscription`}
-                          </p>
-                        </div>
-                        <div style={{ display: "flex", alignItems: "center" }}>
-                          <h5
-                            style={{
-                              color: "#424242",
-                              fontWeight: 800,
-                            }}
-                          >
-                            {`$ ${patch.payableAnnually || 0}`}
-                          </h5>
-                          <p
-                            style={{
-                              color: "#424242",
-                              fontSize: 16,
-                              lineHeight: "20px",
-                              margin: "0 0 0 8px",
-                            }}
-                          >
-                            {`per month, billed annually`}
-                          </p>
-                        </div>
+                      <div style={{ display: "flex", alignItems: "center" }}>
+                        <h5
+                          style={{
+                            color: "#424242",
+                            fontWeight: 800,
+                          }}
+                        >
+                          {`$ ${patch.payableMonthly || 0}`}
+                        </h5>
+                        <p
+                          style={{
+                            color: "#424242",
+                            fontSize: 16,
+                            lineHeight: "20px",
+                            margin: "0 0 0 8px",
+                          }}
+                        >
+                          {`per month`}
+                        </p>
                       </div>
                     </div>
-                  )}
+                    <div
+                      style={{
+                        marginTop: 26,
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        background: patch.annuallyActive
+                          ? "#F1FFF2"
+                          : "#ffffff",
+                        padding: 16,
+                        borderRadius: 8,
+                        width: "100%",
+                        border: patch.annuallyActive
+                          ? "1px solid #274B28"
+                          : "1px solid #E0E0E0",
+                      }}
+                    >
+                      <div style={{ display: "flex", alignItems: "center" }}>
+                        {patch.annuallyActive ? (
+                          <img
+                            src={RadioBoxMarked}
+                            alt="radi-box-marked"
+                            height={24}
+                            width={24}
+                            onClick={() => {
+                              unselectPlan(index);
+                              setPlanDetails(null);
+                            }}
+                          />
+                        ) : (
+                          <img
+                            src={RadioBoxBlank}
+                            alt="radio-box-blank"
+                            height={24}
+                            width={24}
+                            onClick={() => {
+                              selectPlan(index);
+                              setPlanDetails("annual");
+                            }}
+                          />
+                        )}
+                        <p
+                          style={{
+                            color: "#274B28",
+                            fontSize: 16,
+                            lineHeight: "20px",
+                            margin: "0 0 0 16px",
+                          }}
+                        >
+                          {`Annual Subscription`}
+                        </p>
+                      </div>
+                      <div style={{ display: "flex", alignItems: "center" }}>
+                        <h5
+                          style={{
+                            color: "#424242",
+                            fontWeight: 800,
+                          }}
+                        >
+                          {`$ ${patch.payableAnnually || 0}`}
+                        </h5>
+                        <p
+                          style={{
+                            color: "#424242",
+                            fontSize: 16,
+                            lineHeight: "20px",
+                            margin: "0 0 0 8px",
+                          }}
+                        >
+                          {`per month, billed annually`}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  {/* )} */}
                 </div>
 
                 <div

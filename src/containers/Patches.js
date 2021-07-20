@@ -4,7 +4,7 @@ import NoData from "../components/common/NoData";
 import SearchBar from "../components/SearchBar";
 import PatchCard from "../components/common/PatchCard";
 import NoDataIllustration from "../assets/illustration/undraw_a_moment_to_relax_bbpa.svg";
-import PlusIcon from "../assets/icons/plus-circle-outline.svg";
+import PlusIcon from "../assets/icons/plus-circle-outline-light.svg";
 import PatchDetails from "../components/common/PatchDetails";
 import { history } from "../index";
 

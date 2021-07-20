@@ -14,24 +14,46 @@ import ProfileIcon from "../assets/icons/account-circle-outline.svg";
 import GiftIcon from "../assets/icons/gift-outline.svg";
 import LoadingImageGif from "../assets/loader.gif";
 import CartDetails from "../components/common/CartDetails";
-import BuyModal from "../components/common/buy-modal";
 import LoadingFormButton from "../components/common/LoadingFormButton";
 import ReceiptIcon from "../assets/icons/receipt.svg";
+import CreditCardOutline from "../assets/icons/credit-card-outline.svg";
+import RadioBoxBlank from "../assets/icons/radiobox-blank.svg";
+import RadioBoxMarked from "../assets/icons/radiobox-marked.svg";
+import PlusIcon from "../assets/icons/plus-circle-outline.svg";
 import PaymentDetails from "../components/common/PaymentDetails";
 import { history } from "..";
+import AddNewPaymentMethod from "../components/common/AddNewPaymentMethod";
 
 const Cart = (props) => {
   const {
     location: { pathname },
   } = props;
-  const [sumbit1, setSubmit1] = useState(false);
-  const [submit2, setSubmit2] = useState(false);
+  const [sumbit1, setSubmit1] = useState(
+    JSON.parse(window.localStorage.getItem("submit1")) || false
+  );
+  const [submit2, setSubmit2] = useState(
+    JSON.parse(window.localStorage.getItem("submit2")) || false
+  );
   const [submit3, setSubmit3] = useState(false);
 
   const [updateSource, setUpdateSource] = useState(CartDetails);
+  const [updatedPaymentSource, setUpdatedPaymentSource] =
+    useState(PaymentDetails);
   const [pageLoading, setPageLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [visible, setVisible] = useState(false);
+  const [activePaymentIndex, setActivePaymentIndex] = useState(null);
+  const [active, setActive] = useState(false);
+
+  const addSpacesInCardNumber = (number) => {
+    let updatedNumber = number.match(/.{1,4}/g);
+    return updatedNumber.join(" ");
+  };
+
+  const [showReceiverForm, setShowReceiverForm] = useState(
+    JSON.parse(window.localStorage.getItem("gift")) || false
+  );
+
   const [information, setInformation] = useState({
     firstName: "",
     lastName: "",
@@ -40,7 +62,12 @@ const Cart = (props) => {
     receiverLastName: "",
     receiverEmail: "",
   });
-  // const open = () => setVisible(true);
+  const [personalInformation, setPersonalInformation] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+  });
+  const open = () => setVisible(true);
   const onClose = () => setVisible(false);
 
   const noData = {
@@ -87,6 +114,12 @@ const Cart = (props) => {
     },
   ];
 
+  const [enabledForPersonalOnly, setEnabledForPersonalOnly] = useState({
+    firstName: false,
+    lastName: false,
+    email: false,
+  });
+
   const [enabled, setEnabled] = useState({
     firstName: false,
     lastName: false,
@@ -110,6 +143,17 @@ const Cart = (props) => {
     return true;
   };
 
+  const enablingPersonalStatus = (enablerObject) => {
+    if (
+      enablerObject.firstName &&
+      enablerObject.lastName &&
+      enablerObject.email
+    ) {
+      return false;
+    }
+    return true;
+  };
+
   const updateItem = (index, whichvalue, newvalue) => {
     let g = CartDetails[index];
     g[whichvalue] = newvalue;
@@ -121,10 +165,10 @@ const Cart = (props) => {
         ...updateSource.slice(index + 1),
       ]);
   };
-  // updateItem(idx, "annuallyActive", true);
 
   const onChange = (checked) => {
-    console.log(`switch to ${checked}`);
+    window.localStorage.setItem("gift", checked);
+    setShowReceiverForm(checked);
   };
 
   const putCommaInAmount = (amount) => {
@@ -150,30 +194,73 @@ const Cart = (props) => {
 
   const onDoneForStep2 = async () => {
     setSubmitting(true);
-    const personalInformation = {
-      firstName: information.firstName,
-      lastName: information.lastName,
-      emailAddress: information.email,
+    const basicPersonalInformation = {
+      firstName: showReceiverForm
+        ? information.firstName
+        : personalInformation.firstName,
+      lastName: showReceiverForm
+        ? information.lastName
+        : personalInformation.lastName,
+      emailAddress: showReceiverForm
+        ? information.email
+        : personalInformation.email,
     };
     const receiverInformation = {
       firstName: information.receiverFirstName,
       lastName: information.receiverLastName,
       emailAddress: information.receiverEmail,
     };
-    updateItem(0, "personalInformation", personalInformation);
-    updateItem(0, "receiverInformation", receiverInformation);
+    updateItem(0, "personalInformation", basicPersonalInformation);
+
+    showReceiverForm &&
+      updateItem(0, "receiverInformation", receiverInformation);
+
     setSubmitting(false);
     window.localStorage.setItem("submit2", true);
     setSubmit2(true);
     history.push("/dashboard/patches/cart/payment");
   };
 
+  const updatePaymentStatus = (index, whichvalue, newvalue) => {
+    let g = PaymentDetails[index];
+    g[whichvalue] = newvalue;
+    if (index === -1) {
+    } else
+      setUpdatedPaymentSource([
+        ...updatedPaymentSource.slice(0, index),
+        g,
+        ...updatedPaymentSource.slice(index + 1),
+      ]);
+  };
+
+  const selectPaymentPlan = (index) => {
+    setActive(true);
+    setActivePaymentIndex(index);
+    for (var i = 0; i < PaymentDetails.length; i++) {
+      if (i === index) {
+        updatePaymentStatus(index, "active", true);
+      } else {
+        updatePaymentStatus(i, "active", false);
+      }
+    }
+  };
+
+  const unSelectPaymentPlan = () => {
+    setActivePaymentIndex(null);
+    setActive(false);
+    for (var i = 0; i < PaymentDetails.length; i++) {
+      updatePaymentStatus(i, "active", false);
+    }
+  };
+
   const onDoneForStep3 = async () => {
     setSubmitting(true);
+    console.log(activePaymentIndex);
+    console.log(PaymentDetails[activePaymentIndex].id);
     window.localStorage.setItem("submit3", true);
     setSubmitting(false);
     setSubmit3(true);
-    history.push("/dashboard/patches/cart/congratulations");
+    history.push("/dashboard/congratulations");
   };
 
   return pageLoading ? (
@@ -188,7 +275,7 @@ const Cart = (props) => {
         backgroundColor: "#fffff",
       }}
     >
-      <img src={LoadingImageGif} alt="loading-gif" height={80} width={80} />
+      <img src={LoadingImageGif} alt="loading-gif" height={120} width={120} />
     </div>
   ) : CartDetails[0]["forests"].length > 0 ? (
     <div
@@ -230,7 +317,13 @@ const Cart = (props) => {
             }}
           >
             {sumbit1 ? (
-              <div style={{ border: "1px solid #ffffff", borderRadius: "50%" }}>
+              <div
+                style={{
+                  border: "1px solid #ffffff",
+                  borderRadius: "50%",
+                  background: "#ffffff",
+                }}
+              >
                 <img src={CircleTick} alt="check-mark" height={32} width={32} />
               </div>
             ) : (
@@ -261,8 +354,7 @@ const Cart = (props) => {
                 fontSize: 18,
                 lineHeight: "23px",
                 margin: "0 0 0 16px",
-                opacity:
-                  pathname === "/dashboard/patches/cart/review" ? 1 : 0.4,
+                opacity: sumbit1 ? 1 : 0.4,
               }}
             >
               Review Selected Forest Units
@@ -291,7 +383,13 @@ const Cart = (props) => {
             }}
           >
             {submit2 ? (
-              <div style={{ border: "1px solid #ffffff", borderRadius: "50%" }}>
+              <div
+                style={{
+                  border: "1px solid #ffffff",
+                  borderRadius: "50%",
+                  background: "#ffffff",
+                }}
+              >
                 <img src={CircleTick} alt="check-mark" height={32} width={32} />
               </div>
             ) : (
@@ -317,16 +415,14 @@ const Cart = (props) => {
                 2
               </div>
             )}
+
             <p
               style={{
                 color: "#ffffff",
                 fontSize: 18,
                 lineHeight: "23px",
                 margin: "0 0 0 16px",
-                opacity:
-                  pathname === "/dashboard/patches/cart/personal-information"
-                    ? 1
-                    : 0.4,
+                opacity: submit2 ? 1 : 0.4,
               }}
             >
               Review Personal Information
@@ -356,7 +452,13 @@ const Cart = (props) => {
             }}
           >
             {submit3 ? (
-              <div style={{ border: "1px solid #ffffff", borderRadius: "50%" }}>
+              <div
+                style={{
+                  border: "1px solid #ffffff",
+                  borderRadius: "50%",
+                  background: "#ffffff",
+                }}
+              >
                 <img src={CircleTick} alt="check-mark" height={32} width={32} />
               </div>
             ) : (
@@ -476,7 +578,10 @@ const Cart = (props) => {
                     alignItems: "center",
                   }}
                 >
-                  <Switch defaultChecked onChange={onChange} />
+                  <Switch
+                    defaultChecked={showReceiverForm}
+                    onChange={onChange}
+                  />
                   <p
                     style={{
                       fontSize: 14,
@@ -751,7 +856,7 @@ const Cart = (props) => {
               submitting={submitting}
               label="Proceed to next step"
               onClick={proceedToNextStep2}
-              style={{ width: 324 }}
+              style={{ width: 324, height: 56 }}
               className={"update-button"}
             />
           </div>
@@ -770,496 +875,802 @@ const Cart = (props) => {
               height: "100%",
             }}
           >
-            <div
-              style={{
-                width: "100%",
-                maxWidth: 992,
-                minWidth: 900,
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "flex-start",
-                boxShadow: "0px 1px 8px rgba(0, 0, 0, 0.12)",
-              }}
-            >
+            {showReceiverForm ? (
               <div
                 style={{
-                  background: "#F1FFF2",
-                  borderRadius: "8px 8px 0px 0px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "flex-start",
-                  padding: 24,
-                }}
-              >
-                <img
-                  src={ProfileIcon}
-                  alt="profile-icon"
-                  height={32}
-                  width={32}
-                />
-                <h4
-                  style={{
-                    margin: "0 0 0 24px",
-                    color: "#274B28",
-                    fontWeight: 700,
-                  }}
-                >
-                  Personal Information
-                </h4>
-              </div>
-              <div
-                style={{
-                  background: "#FFFFFF",
-                  borderRadius: "0px 0px 8px 8px",
+                  width: "100%",
+                  maxWidth: 992,
+                  minWidth: 900,
                   display: "flex",
                   flexDirection: "column",
-                  alignItems: "center",
                   justifyContent: "flex-start",
-                  padding: 24,
+                  boxShadow: "0px 1px 8px rgba(0, 0, 0, 0.12)",
                 }}
               >
                 <div
                   style={{
+                    background: "#F1FFF2",
+                    borderRadius: "8px 8px 0px 0px",
                     display: "flex",
-                    width: "100%",
-                    justifyContent: "space-between",
+                    alignItems: "center",
+                    justifyContent: "flex-start",
+                    padding: 24,
                   }}
                 >
-                  <Form.Item
+                  <img
+                    src={ProfileIcon}
+                    alt="profile-icon"
+                    height={32}
+                    width={32}
+                  />
+                  <h4
                     style={{
-                      width: "100%",
-                      height: "100%",
-                      position: "relative",
-                      padding: 0,
-                      border: "none",
-                      marginRight: 32,
+                      margin: "0 0 0 24px",
+                      color: "#274B28",
+                      fontWeight: 700,
+                    }}
+                  >
+                    Personal Information
+                  </h4>
+                </div>
+                <div
+                  style={{
+                    background: "#FFFFFF",
+                    borderRadius: "0px 0px 8px 8px",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "flex-start",
+                    padding: 24,
+                  }}
+                >
+                  <div
+                    style={{
                       display: "flex",
-                      flexDirection: "column",
+                      width: "100%",
+                      justifyContent: "space-between",
                     }}
-                    rules={[
-                      {
-                        required: true,
-                        message: "First name is required",
-                      },
-                    ]}
-                    required={false}
                   >
-                    <p
+                    <Form.Item
                       style={{
-                        color: "#9E9E9E",
-                        fontSize: 16,
-                        lineHeight: "20px",
-                        margin: 0,
-                        wordSpacing: -2.5,
-                        fontWeight: 700,
+                        width: "100%",
+                        height: "100%",
+                        position: "relative",
+                        padding: 0,
+                        border: "none",
+                        marginRight: 32,
+                        display: "flex",
+                        flexDirection: "column",
                       }}
+                      rules={[
+                        {
+                          required: true,
+                          message: "First name is required",
+                        },
+                      ]}
+                      required={false}
                     >
-                      First Name
-                    </p>
-                    <Input
-                      type="text"
-                      onChange={(e) => {
-                        if (e.target.value !== "" && e.target.value !== null) {
-                          setEnabled({ ...enabled, firstName: true });
-                          setInformation({
-                            ...information,
-                            firstName: e.target.value,
-                          });
-                        } else {
-                          setEnabled({ ...enabled, firstName: false });
-                          setInformation({
-                            ...information,
-                            firstName: e.target.value,
-                          });
-                        }
-                      }}
-                      style={{
-                        height: 64,
-                        color: "#424242",
-                        background: "#FAFAFA",
-                        borderRadius: 8,
-                        border: "1px solid #E0E0E0",
-                        fontSize: 18,
-                        paddingLeft: 24,
-                        lineHeight: "23px",
-                        boxShadow: "none",
-                        marginTop: 10,
-                      }}
-                    />
-                  </Form.Item>
+                      <p
+                        style={{
+                          color: "#9E9E9E",
+                          fontSize: 16,
+                          lineHeight: "20px",
+                          margin: 0,
+                          wordSpacing: -2.5,
+                          fontWeight: 700,
+                        }}
+                      >
+                        First Name
+                      </p>
+                      <Input
+                        type="text"
+                        onChange={(e) => {
+                          if (
+                            e.target.value !== "" &&
+                            e.target.value !== null
+                          ) {
+                            setEnabled({ ...enabled, firstName: true });
+                            setInformation({
+                              ...information,
+                              firstName: e.target.value,
+                            });
+                          } else {
+                            setEnabled({ ...enabled, firstName: false });
+                            setInformation({
+                              ...information,
+                              firstName: e.target.value,
+                            });
+                          }
+                        }}
+                        style={{
+                          height: 64,
+                          color: "#424242",
+                          background: "#FAFAFA",
+                          borderRadius: 8,
+                          border: "1px solid #E0E0E0",
+                          fontSize: 18,
+                          paddingLeft: 24,
+                          lineHeight: "23px",
+                          boxShadow: "none",
+                          marginTop: 10,
+                        }}
+                      />
+                    </Form.Item>
 
-                  <Form.Item
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      position: "relative",
-                      padding: 0,
-                      border: "none",
-                    }}
-                    rules={[
-                      {
-                        required: true,
-                        message: "Last name is required",
-                      },
-                    ]}
-                    required={false}
-                  >
-                    <p
+                    <Form.Item
                       style={{
-                        color: "#9E9E9E",
-                        fontSize: 16,
-                        lineHeight: "20px",
-                        margin: 0,
-                        wordSpacing: -2.5,
-                        fontWeight: 700,
+                        width: "100%",
+                        height: "100%",
+                        position: "relative",
+                        padding: 0,
+                        border: "none",
                       }}
+                      rules={[
+                        {
+                          required: true,
+                          message: "Last name is required",
+                        },
+                      ]}
+                      required={false}
                     >
-                      Last Name
-                    </p>
-                    <Input
-                      type="text"
-                      onChange={(e) => {
-                        if (e.target.value !== "" && e.target.value !== null) {
-                          setEnabled({ ...enabled, lastName: true });
-                          setInformation({
-                            ...information,
-                            lastName: e.target.value,
-                          });
-                        } else {
-                          setEnabled({ ...enabled, lastName: false });
-                          setInformation({
-                            ...information,
-                            lastName: e.target.value,
-                          });
-                        }
-                      }}
-                      style={{
-                        height: 64,
-                        color: "#424242",
-                        background: "#FAFAFA",
-                        borderRadius: 8,
-                        border: "1px solid #E0E0E0",
-                        fontSize: 18,
-                        paddingLeft: 24,
-                        lineHeight: "23px",
-                        boxShadow: "none",
-                        marginTop: 10,
-                      }}
-                    />
-                  </Form.Item>
-                </div>
-                <div
-                  style={{
-                    display: "flex",
-                    width: "100%",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <Form.Item
+                      <p
+                        style={{
+                          color: "#9E9E9E",
+                          fontSize: 16,
+                          lineHeight: "20px",
+                          margin: 0,
+                          wordSpacing: -2.5,
+                          fontWeight: 700,
+                        }}
+                      >
+                        Last Name
+                      </p>
+                      <Input
+                        type="text"
+                        onChange={(e) => {
+                          if (
+                            e.target.value !== "" &&
+                            e.target.value !== null
+                          ) {
+                            setEnabled({ ...enabled, lastName: true });
+                            setInformation({
+                              ...information,
+                              lastName: e.target.value,
+                            });
+                          } else {
+                            setEnabled({ ...enabled, lastName: false });
+                            setInformation({
+                              ...information,
+                              lastName: e.target.value,
+                            });
+                          }
+                        }}
+                        style={{
+                          height: 64,
+                          color: "#424242",
+                          background: "#FAFAFA",
+                          borderRadius: 8,
+                          border: "1px solid #E0E0E0",
+                          fontSize: 18,
+                          paddingLeft: 24,
+                          lineHeight: "23px",
+                          boxShadow: "none",
+                          marginTop: 10,
+                        }}
+                      />
+                    </Form.Item>
+                  </div>
+                  <div
                     style={{
-                      maxWidth: "48.5%",
+                      display: "flex",
                       width: "100%",
-                      height: "100%",
-                      position: "relative",
-                      padding: 0,
-                      border: "none",
+                      justifyContent: "space-between",
                     }}
-                    rules={[
-                      {
-                        required: true,
-                        message: "Email is required",
-                      },
-                    ]}
-                    required={false}
                   >
-                    <p
+                    <Form.Item
                       style={{
-                        color: "#9E9E9E",
-                        fontSize: 16,
-                        lineHeight: "20px",
-                        margin: 0,
-                        wordSpacing: -2.5,
-                        fontWeight: 700,
+                        maxWidth: "48.5%",
+                        width: "100%",
+                        height: "100%",
+                        position: "relative",
+                        padding: 0,
+                        border: "none",
                       }}
+                      rules={[
+                        {
+                          required: true,
+                          message: "Email is required",
+                        },
+                      ]}
+                      required={false}
                     >
-                      Email Address
-                    </p>
-                    <Input
-                      type="email"
-                      onChange={(e) => {
-                        if (e.target.value !== "" && e.target.value !== null) {
-                          setEnabled({ ...enabled, email: true });
-                          setInformation({
-                            ...information,
-                            email: e.target.value,
-                          });
-                        } else {
-                          setEnabled({ ...enabled, email: false });
-                          setInformation({
-                            ...information,
-                            email: e.target.value,
-                          });
-                        }
-                      }}
-                      style={{
-                        height: 64,
-                        color: "#424242",
-                        background: "#FAFAFA",
-                        borderRadius: 8,
-                        border: "1px solid #E0E0E0",
-                        fontSize: 18,
-                        paddingLeft: 24,
-                        lineHeight: "23px",
-                        boxShadow: "none",
-                        marginTop: 10,
-                      }}
-                    />
-                  </Form.Item>
+                      <p
+                        style={{
+                          color: "#9E9E9E",
+                          fontSize: 16,
+                          lineHeight: "20px",
+                          margin: 0,
+                          wordSpacing: -2.5,
+                          fontWeight: 700,
+                        }}
+                      >
+                        Email Address
+                      </p>
+                      <Input
+                        type="email"
+                        onChange={(e) => {
+                          if (
+                            e.target.value !== "" &&
+                            e.target.value !== null
+                          ) {
+                            setEnabled({ ...enabled, email: true });
+                            setInformation({
+                              ...information,
+                              email: e.target.value,
+                            });
+                          } else {
+                            setEnabled({ ...enabled, email: false });
+                            setInformation({
+                              ...information,
+                              email: e.target.value,
+                            });
+                          }
+                        }}
+                        style={{
+                          height: 64,
+                          color: "#424242",
+                          background: "#FAFAFA",
+                          borderRadius: 8,
+                          border: "1px solid #E0E0E0",
+                          fontSize: 18,
+                          paddingLeft: 24,
+                          lineHeight: "23px",
+                          boxShadow: "none",
+                          marginTop: 10,
+                        }}
+                      />
+                    </Form.Item>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div
-              style={{
-                width: "100%",
-                maxWidth: 992,
-                minWidth: 900,
-                marginTop: 32,
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "flex-start",
-                boxShadow: "0px 1px 8px rgba(0, 0, 0, 0.12)",
-              }}
-            >
+            ) : (
               <div
                 style={{
-                  background: "#F1FFF2",
-                  borderRadius: "8px 8px 0px 0px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "flex-start",
-                  padding: 24,
-                }}
-              >
-                <img src={GiftIcon} alt="giftbox-icon" height={32} width={32} />
-                <h4
-                  style={{
-                    margin: "0 0 0 24px",
-                    color: "#274B28",
-                    fontWeight: 700,
-                  }}
-                >
-                  Receiver's Information
-                </h4>
-              </div>
-              <div
-                style={{
-                  background: "#FFFFFF",
-                  borderRadius: "0px 0px 8px 8px",
+                  width: "100%",
+                  maxWidth: 992,
+                  minWidth: 900,
                   display: "flex",
                   flexDirection: "column",
-                  alignItems: "center",
                   justifyContent: "flex-start",
-                  padding: 24,
+                  boxShadow: "0px 1px 8px rgba(0, 0, 0, 0.12)",
                 }}
               >
                 <div
                   style={{
+                    background: "#F1FFF2",
+                    borderRadius: "8px 8px 0px 0px",
                     display: "flex",
-                    width: "100%",
-                    justifyContent: "space-between",
+                    alignItems: "center",
+                    justifyContent: "flex-start",
+                    padding: 24,
                   }}
                 >
-                  <Form.Item
+                  <img
+                    src={ProfileIcon}
+                    alt="profile-icon"
+                    height={32}
+                    width={32}
+                  />
+                  <h4
                     style={{
-                      width: "100%",
-                      height: "100%",
-                      position: "relative",
-                      padding: 0,
-                      border: "none",
-                      marginRight: 32,
+                      margin: "0 0 0 24px",
+                      color: "#274B28",
+                      fontWeight: 700,
                     }}
-                    rules={[
-                      {
-                        required: true,
-                        message: "First name is required",
-                      },
-                    ]}
-                    required={false}
                   >
-                    <p
-                      style={{
-                        color: "#9E9E9E",
-                        fontSize: 16,
-                        lineHeight: "20px",
-                        margin: 0,
-                        wordSpacing: -2.5,
-                        fontWeight: 700,
-                      }}
-                    >
-                      First Name
-                    </p>
-                    <Input
-                      type="text"
-                      onChange={(e) => {
-                        if (e.target.value !== "" && e.target.value !== null) {
-                          setEnabled({ ...enabled, receiverFirstName: true });
-                          setInformation({
-                            ...information,
-                            receiverFirstName: e.target.value,
-                          });
-                        } else {
-                          setEnabled({ ...enabled, receiverFirstName: false });
-                          setInformation({
-                            ...information,
-                            receiverFirstName: e.target.value,
-                          });
-                        }
-                      }}
-                      style={{
-                        height: 64,
-                        color: "#424242",
-                        background: "#FAFAFA",
-                        borderRadius: 8,
-                        border: "1px solid #E0E0E0",
-                        fontSize: 18,
-                        paddingLeft: 24,
-                        lineHeight: "23px",
-                        boxShadow: "none",
-                        marginTop: 10,
-                      }}
-                    />
-                  </Form.Item>
-
-                  <Form.Item
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      position: "relative",
-                      padding: 0,
-                      border: "none",
-                    }}
-                    rules={[
-                      {
-                        required: true,
-                        message: "Last name is required",
-                      },
-                    ]}
-                    required={false}
-                  >
-                    <p
-                      style={{
-                        color: "#9E9E9E",
-                        fontSize: 16,
-                        lineHeight: "20px",
-                        margin: 0,
-                        wordSpacing: -2.5,
-                        fontWeight: 700,
-                      }}
-                    >
-                      Last Name
-                    </p>
-                    <Input
-                      type="text"
-                      onChange={(e) => {
-                        if (e.target.value !== "" && e.target.value !== null) {
-                          setEnabled({ ...enabled, receiverLastName: true });
-                          setInformation({
-                            ...information,
-                            receiverLastName: e.target.value,
-                          });
-                        } else {
-                          setEnabled({ ...enabled, receiverLastName: false });
-                          setInformation({
-                            ...information,
-                            receiverLastName: e.target.value,
-                          });
-                        }
-                      }}
-                      style={{
-                        height: 64,
-                        color: "#424242",
-                        background: "#FAFAFA",
-                        borderRadius: 8,
-                        border: "1px solid #E0E0E0",
-                        fontSize: 18,
-                        paddingLeft: 24,
-                        lineHeight: "23px",
-                        boxShadow: "none",
-                        marginTop: 10,
-                      }}
-                    />
-                  </Form.Item>
+                    Personal Information
+                  </h4>
                 </div>
                 <div
                   style={{
+                    background: "#FFFFFF",
+                    borderRadius: "0px 0px 8px 8px",
                     display: "flex",
-                    width: "100%",
-                    justifyContent: "space-between",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "flex-start",
+                    padding: 24,
                   }}
                 >
-                  <Form.Item
+                  <div
                     style={{
-                      maxWidth: "48.5%",
+                      display: "flex",
                       width: "100%",
-                      height: "100%",
-                      position: "relative",
-                      padding: 0,
-                      border: "none",
+                      justifyContent: "space-between",
                     }}
-                    rules={[
-                      {
-                        required: true,
-                        message: "Email is required",
-                      },
-                    ]}
-                    required={false}
                   >
-                    <p
+                    <Form.Item
                       style={{
-                        color: "#9E9E9E",
-                        fontSize: 16,
-                        lineHeight: "20px",
-                        margin: 0,
-                        wordSpacing: -2.5,
-                        fontWeight: 700,
+                        width: "100%",
+                        height: "100%",
+                        position: "relative",
+                        padding: 0,
+                        border: "none",
+                        marginRight: 32,
+                        display: "flex",
+                        flexDirection: "column",
                       }}
+                      rules={[
+                        {
+                          required: true,
+                          message: "First name is required",
+                        },
+                      ]}
+                      required={false}
                     >
-                      Email Address
-                    </p>
-                    <Input
-                      type="email"
-                      onChange={(e) => {
-                        if (e.target.value !== "" && e.target.value !== null) {
-                          setEnabled({ ...enabled, receiverEmail: true });
-                          setInformation({
-                            ...information,
-                            receiverEmail: e.target.value,
-                          });
-                        } else {
-                          setEnabled({ ...enabled, receiverEmail: false });
-                          setInformation({
-                            ...information,
-                            receiverEmail: e.target.value,
-                          });
-                        }
-                      }}
+                      <p
+                        style={{
+                          color: "#9E9E9E",
+                          fontSize: 16,
+                          lineHeight: "20px",
+                          margin: 0,
+                          wordSpacing: -2.5,
+                          fontWeight: 700,
+                        }}
+                      >
+                        First Name
+                      </p>
+                      <Input
+                        type="text"
+                        onChange={(e) => {
+                          if (
+                            e.target.value !== "" &&
+                            e.target.value !== null
+                          ) {
+                            setEnabledForPersonalOnly({
+                              ...enabledForPersonalOnly,
+                              firstName: true,
+                            });
+                            setPersonalInformation({
+                              ...personalInformation,
+                              firstName: e.target.value,
+                            });
+                          } else {
+                            setEnabledForPersonalOnly({
+                              ...enabledForPersonalOnly,
+                              firstName: false,
+                            });
+                            setPersonalInformation({
+                              ...personalInformation,
+                              firstName: e.target.value,
+                            });
+                          }
+                        }}
+                        style={{
+                          height: 64,
+                          color: "#424242",
+                          background: "#FAFAFA",
+                          borderRadius: 8,
+                          border: "1px solid #E0E0E0",
+                          fontSize: 18,
+                          paddingLeft: 24,
+                          lineHeight: "23px",
+                          boxShadow: "none",
+                          marginTop: 10,
+                        }}
+                      />
+                    </Form.Item>
+
+                    <Form.Item
                       style={{
-                        height: 64,
-                        color: "#424242",
-                        background: "#FAFAFA",
-                        borderRadius: 8,
-                        border: "1px solid #E0E0E0",
-                        fontSize: 18,
-                        paddingLeft: 24,
-                        lineHeight: "23px",
-                        boxShadow: "none",
-                        marginTop: 10,
+                        width: "100%",
+                        height: "100%",
+                        position: "relative",
+                        padding: 0,
+                        border: "none",
                       }}
-                    />
-                  </Form.Item>
+                      rules={[
+                        {
+                          required: true,
+                          message: "Last name is required",
+                        },
+                      ]}
+                      required={false}
+                    >
+                      <p
+                        style={{
+                          color: "#9E9E9E",
+                          fontSize: 16,
+                          lineHeight: "20px",
+                          margin: 0,
+                          wordSpacing: -2.5,
+                          fontWeight: 700,
+                        }}
+                      >
+                        Last Name
+                      </p>
+                      <Input
+                        type="text"
+                        onChange={(e) => {
+                          if (
+                            e.target.value !== "" &&
+                            e.target.value !== null
+                          ) {
+                            setEnabledForPersonalOnly({
+                              ...enabledForPersonalOnly,
+                              lastName: true,
+                            });
+                            setPersonalInformation({
+                              ...personalInformation,
+                              lastName: e.target.value,
+                            });
+                          } else {
+                            setEnabledForPersonalOnly({
+                              ...enabledForPersonalOnly,
+                              lastName: false,
+                            });
+                            setPersonalInformation({
+                              ...personalInformation,
+                              lastName: e.target.value,
+                            });
+                          }
+                        }}
+                        style={{
+                          height: 64,
+                          color: "#424242",
+                          background: "#FAFAFA",
+                          borderRadius: 8,
+                          border: "1px solid #E0E0E0",
+                          fontSize: 18,
+                          paddingLeft: 24,
+                          lineHeight: "23px",
+                          boxShadow: "none",
+                          marginTop: 10,
+                        }}
+                      />
+                    </Form.Item>
+                  </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      width: "100%",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <Form.Item
+                      style={{
+                        maxWidth: "48.5%",
+                        width: "100%",
+                        height: "100%",
+                        position: "relative",
+                        padding: 0,
+                        border: "none",
+                      }}
+                      rules={[
+                        {
+                          required: true,
+                          message: "Email is required",
+                        },
+                      ]}
+                      required={false}
+                    >
+                      <p
+                        style={{
+                          color: "#9E9E9E",
+                          fontSize: 16,
+                          lineHeight: "20px",
+                          margin: 0,
+                          wordSpacing: -2.5,
+                          fontWeight: 700,
+                        }}
+                      >
+                        Email Address
+                      </p>
+                      <Input
+                        type="email"
+                        onChange={(e) => {
+                          if (
+                            e.target.value !== "" &&
+                            e.target.value !== null
+                          ) {
+                            setEnabledForPersonalOnly({
+                              ...enabledForPersonalOnly,
+                              email: true,
+                            });
+                            setPersonalInformation({
+                              ...personalInformation,
+                              email: e.target.value,
+                            });
+                          } else {
+                            setEnabledForPersonalOnly({
+                              ...enabledForPersonalOnly,
+                              email: false,
+                            });
+                            setPersonalInformation({
+                              ...personalInformation,
+                              email: e.target.value,
+                            });
+                          }
+                        }}
+                        style={{
+                          height: 64,
+                          color: "#424242",
+                          background: "#FAFAFA",
+                          borderRadius: 8,
+                          border: "1px solid #E0E0E0",
+                          fontSize: 18,
+                          paddingLeft: 24,
+                          lineHeight: "23px",
+                          boxShadow: "none",
+                          marginTop: 10,
+                        }}
+                      />
+                    </Form.Item>
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
+            {showReceiverForm && (
+              <div
+                style={{
+                  width: "100%",
+                  maxWidth: 992,
+                  minWidth: 900,
+                  marginTop: 32,
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "flex-start",
+                  boxShadow: "0px 1px 8px rgba(0, 0, 0, 0.12)",
+                }}
+              >
+                <div
+                  style={{
+                    background: "#F1FFF2",
+                    borderRadius: "8px 8px 0px 0px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "flex-start",
+                    padding: 24,
+                  }}
+                >
+                  <img
+                    src={GiftIcon}
+                    alt="giftbox-icon"
+                    height={32}
+                    width={32}
+                  />
+                  <h4
+                    style={{
+                      margin: "0 0 0 24px",
+                      color: "#274B28",
+                      fontWeight: 700,
+                    }}
+                  >
+                    Receiver's Information
+                  </h4>
+                </div>
+                <div
+                  style={{
+                    background: "#FFFFFF",
+                    borderRadius: "0px 0px 8px 8px",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "flex-start",
+                    padding: 24,
+                  }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      width: "100%",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <Form.Item
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        position: "relative",
+                        padding: 0,
+                        border: "none",
+                        marginRight: 32,
+                      }}
+                      rules={[
+                        {
+                          required: true,
+                          message: "First name is required",
+                        },
+                      ]}
+                      required={false}
+                    >
+                      <p
+                        style={{
+                          color: "#9E9E9E",
+                          fontSize: 16,
+                          lineHeight: "20px",
+                          margin: 0,
+                          wordSpacing: -2.5,
+                          fontWeight: 700,
+                        }}
+                      >
+                        First Name
+                      </p>
+                      <Input
+                        type="text"
+                        onChange={(e) => {
+                          if (
+                            e.target.value !== "" &&
+                            e.target.value !== null
+                          ) {
+                            setEnabled({ ...enabled, receiverFirstName: true });
+                            setInformation({
+                              ...information,
+                              receiverFirstName: e.target.value,
+                            });
+                          } else {
+                            setEnabled({
+                              ...enabled,
+                              receiverFirstName: false,
+                            });
+                            setInformation({
+                              ...information,
+                              receiverFirstName: e.target.value,
+                            });
+                          }
+                        }}
+                        style={{
+                          height: 64,
+                          color: "#424242",
+                          background: "#FAFAFA",
+                          borderRadius: 8,
+                          border: "1px solid #E0E0E0",
+                          fontSize: 18,
+                          paddingLeft: 24,
+                          lineHeight: "23px",
+                          boxShadow: "none",
+                          marginTop: 10,
+                        }}
+                      />
+                    </Form.Item>
+
+                    <Form.Item
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        position: "relative",
+                        padding: 0,
+                        border: "none",
+                      }}
+                      rules={[
+                        {
+                          required: true,
+                          message: "Last name is required",
+                        },
+                      ]}
+                      required={false}
+                    >
+                      <p
+                        style={{
+                          color: "#9E9E9E",
+                          fontSize: 16,
+                          lineHeight: "20px",
+                          margin: 0,
+                          wordSpacing: -2.5,
+                          fontWeight: 700,
+                        }}
+                      >
+                        Last Name
+                      </p>
+                      <Input
+                        type="text"
+                        onChange={(e) => {
+                          if (
+                            e.target.value !== "" &&
+                            e.target.value !== null
+                          ) {
+                            setEnabled({ ...enabled, receiverLastName: true });
+                            setInformation({
+                              ...information,
+                              receiverLastName: e.target.value,
+                            });
+                          } else {
+                            setEnabled({ ...enabled, receiverLastName: false });
+                            setInformation({
+                              ...information,
+                              receiverLastName: e.target.value,
+                            });
+                          }
+                        }}
+                        style={{
+                          height: 64,
+                          color: "#424242",
+                          background: "#FAFAFA",
+                          borderRadius: 8,
+                          border: "1px solid #E0E0E0",
+                          fontSize: 18,
+                          paddingLeft: 24,
+                          lineHeight: "23px",
+                          boxShadow: "none",
+                          marginTop: 10,
+                        }}
+                      />
+                    </Form.Item>
+                  </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      width: "100%",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <Form.Item
+                      style={{
+                        maxWidth: "48.5%",
+                        width: "100%",
+                        height: "100%",
+                        position: "relative",
+                        padding: 0,
+                        border: "none",
+                      }}
+                      rules={[
+                        {
+                          required: true,
+                          message: "Email is required",
+                        },
+                      ]}
+                      required={false}
+                    >
+                      <p
+                        style={{
+                          color: "#9E9E9E",
+                          fontSize: 16,
+                          lineHeight: "20px",
+                          margin: 0,
+                          wordSpacing: -2.5,
+                          fontWeight: 700,
+                        }}
+                      >
+                        Email Address
+                      </p>
+                      <Input
+                        type="email"
+                        onChange={(e) => {
+                          if (
+                            e.target.value !== "" &&
+                            e.target.value !== null
+                          ) {
+                            setEnabled({ ...enabled, receiverEmail: true });
+                            setInformation({
+                              ...information,
+                              receiverEmail: e.target.value,
+                            });
+                          } else {
+                            setEnabled({ ...enabled, receiverEmail: false });
+                            setInformation({
+                              ...information,
+                              receiverEmail: e.target.value,
+                            });
+                          }
+                        }}
+                        style={{
+                          height: 64,
+                          color: "#424242",
+                          background: "#FAFAFA",
+                          borderRadius: 8,
+                          border: "1px solid #E0E0E0",
+                          fontSize: 18,
+                          paddingLeft: 24,
+                          lineHeight: "23px",
+                          boxShadow: "none",
+                          marginTop: 10,
+                        }}
+                      />
+                    </Form.Item>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         )}
         {/* Step: 2 => Footer */}
@@ -1280,10 +1691,13 @@ const Cart = (props) => {
               style={{
                 background: "#F5F5F5",
                 borderRadius: 100,
-                padding: "10px 24px 8px",
+                cursor: "not-allowed",
                 marginRight: 16,
                 width: 274,
-                textAlign: "center",
+                height: 56,
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
               }}
               onClick={() => {
                 history.push("/dashboard/patches/cart/review");
@@ -1292,28 +1706,62 @@ const Cart = (props) => {
               <h4 style={{ color: "#757575" }}>Previous Step</h4>
             </div>
 
-            {enablingStatus(enabled) ? (
-              <div
-                style={{
-                  background: "#F5F5F5",
-                  borderRadius: 100,
-                  padding: "10px 24px 8px",
-                  cursor: "not-allowed",
-                  marginRight: 16,
-                  width: 274,
-                  textAlign: "center",
-                }}
-              >
-                <h4 style={{ color: "#757575" }}>Proceed to payment</h4>
-              </div>
+            {showReceiverForm ? (
+              <>
+                {enablingStatus(enabled) ? (
+                  <div
+                    style={{
+                      background: "#F5F5F5",
+                      borderRadius: 100,
+                      cursor: "not-allowed",
+                      marginRight: 16,
+                      width: 274,
+                      height: 56,
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <h4 style={{ color: "#757575" }}>Proceed to payment</h4>
+                  </div>
+                ) : (
+                  <LoadingFormButton
+                    submitting={submitting}
+                    label="Proceed to payment"
+                    onClick={onDoneForStep2}
+                    style={{ width: 324, height: 56 }}
+                    className={"update-button"}
+                  />
+                )}
+              </>
             ) : (
-              <LoadingFormButton
-                submitting={submitting}
-                label="Proceed to payment"
-                onClick={onDoneForStep2}
-                style={{ width: 324 }}
-                className={"update-button"}
-              />
+              <>
+                {enablingPersonalStatus(enabledForPersonalOnly) ? (
+                  <div
+                    style={{
+                      background: "#F5F5F5",
+                      borderRadius: 100,
+                      cursor: "not-allowed",
+                      marginRight: 16,
+                      width: 274,
+                      height: 56,
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <h4 style={{ color: "#757575" }}>Proceed to payment</h4>
+                  </div>
+                ) : (
+                  <LoadingFormButton
+                    submitting={submitting}
+                    label="Proceed to payment"
+                    onClick={onDoneForStep2}
+                    style={{ width: 324, height: 56 }}
+                    className={"update-button"}
+                  />
+                )}
+              </>
             )}
           </div>
         )}
@@ -1345,10 +1793,200 @@ const Cart = (props) => {
                 style={{
                   display: "flex",
                   width: "100%",
-                  justifyContent: "space-between",
-                  alignItems: "flex-start",
+                  justifyContent: "center",
+                  alignItems: "center",
                 }}
-              ></div>
+              >
+                <div
+                  style={{
+                    width: "100%",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "flex-start",
+                    boxShadow: "0px 1px 8px rgba(0, 0, 0, 0.12)",
+                  }}
+                >
+                  <div
+                    style={{
+                      background: "#F1FFF2",
+                      borderRadius: "8px 8px 0px 0px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "flex-start",
+                      padding: 24,
+                    }}
+                  >
+                    <img
+                      src={CreditCardOutline}
+                      alt="credit-card-outline"
+                      height={32}
+                      width={32}
+                    />
+                    <h4
+                      style={{
+                        margin: "0 0 0 24px",
+                        color: "#274B28",
+                        fontWeight: 700,
+                      }}
+                    >
+                      Select your payment method
+                    </h4>
+                  </div>
+                  <div
+                    style={{
+                      background: "#FFFFFF",
+                      borderRadius: "0px 0px 8px 8px",
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "flex-start",
+                      padding: "24px 24px 48px",
+                    }}
+                  >
+                    {PaymentDetails.map((payment, index) => (
+                      <div
+                        style={{
+                          marginTop: 24,
+                          display: "flex",
+                          justifyContent: "flex-start",
+                          alignItems: "center",
+                          background: payment.active ? "#F1FFF2" : "#ffffff",
+                          padding: 26,
+                          borderRadius: 8,
+                          width: "100%",
+                          border: payment.active
+                            ? "1px solid #274B28"
+                            : "1px solid #E0E0E0",
+                        }}
+                      >
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            margin: "0 24px",
+                          }}
+                        >
+                          {payment.active ? (
+                            <img
+                              src={RadioBoxMarked}
+                              alt="radi-box-marked"
+                              height={24}
+                              width={24}
+                              onClick={() => {
+                                unSelectPaymentPlan(index);
+                              }}
+                            />
+                          ) : (
+                            <img
+                              src={RadioBoxBlank}
+                              alt="radio-box-blank"
+                              height={24}
+                              width={24}
+                              onClick={() => {
+                                selectPaymentPlan(index);
+                              }}
+                            />
+                          )}
+                        </div>
+
+                        <div style={{ display: "flex", alignItems: "center" }}>
+                          {payment.cardType === "master" && (
+                            <img
+                              src={payment.imgSrc}
+                              alt="payment-method-icon"
+                              height={50}
+                              width={70}
+                            />
+                          )}
+
+                          {payment.cardType === "visa" && (
+                            <img
+                              src={payment.imgSrc}
+                              alt="payment-method-icon"
+                              height={50}
+                              width={50}
+                            />
+                          )}
+
+                          <div
+                            style={{
+                              display: "flex",
+                              flexDirection: "column",
+                              marginLeft: 16,
+                            }}
+                          >
+                            {payment.cardType === "master" && (
+                              <h4
+                                style={{
+                                  color: "#757575",
+                                }}
+                              >
+                                {`Master Card - ${addSpacesInCardNumber(
+                                  payment.cardNumber
+                                )}`}
+                              </h4>
+                            )}
+
+                            {payment.cardType === "visa" && (
+                              <h4
+                                style={{
+                                  color: "#757575",
+                                }}
+                              >
+                                {`VISA Card - ${addSpacesInCardNumber(
+                                  payment.cardNumber
+                                )}`}
+                              </h4>
+                            )}
+                            <p
+                              className="small-p"
+                              style={{
+                                color: "#757575",
+                                margin: "8px 0 0",
+                              }}
+                            >
+                              {`Expires ${payment.cardExpiryMonth}-${payment.cardExpiryYear}`}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+
+                    <div
+                      style={{
+                        marginTop: 24,
+                        display: "flex",
+                        justifyContent: "flex-start",
+                        alignItems: "center",
+                        background: "rgba(0, 0, 0, 0.04)",
+                        borderRadius: 100,
+                        padding: "16px 32px",
+                        width: "100%",
+                        maxWidth: 300,
+                        cursor: "pointer",
+                      }}
+                      onClick={() => open()}
+                    >
+                      <img
+                        src={PlusIcon}
+                        alt="plus-icon"
+                        height={24}
+                        width={24}
+                      />
+                      <p
+                        style={{
+                          color: "#424242",
+                          margin: "0 0 0 16px",
+                          fontSize: 16,
+                          lineHeight: "20px",
+                          textTransform: "capitalize",
+                        }}
+                      >
+                        {`Add new payment method`}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
             <div
               style={{
@@ -1357,7 +1995,7 @@ const Cart = (props) => {
                 justifyContent: "flex-start",
                 width: "100%",
                 maxWidth: 380,
-                marginLeft: 32,
+                marginTop: 48,
               }}
             >
               <div
@@ -1574,6 +2212,7 @@ const Cart = (props) => {
             </div>
           </div>
         )}
+
         {/* Step: 3 => Footer */}
         {pathname === "/dashboard/patches/cart/payment" && (
           <div
@@ -1592,10 +2231,13 @@ const Cart = (props) => {
               style={{
                 background: "#F5F5F5",
                 borderRadius: 100,
-                padding: "10px 24px 8px",
                 marginRight: 16,
                 width: 274,
-                textAlign: "center",
+                height: 56,
+                cursor: "pointer",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
               }}
               onClick={() => {
                 history.push("/dashboard/patches/cart/personal-information");
@@ -1604,16 +2246,18 @@ const Cart = (props) => {
               <h4 style={{ color: "#757575" }}>Previous Step</h4>
             </div>
 
-            {enablingStatus(enabled) ? (
+            {!active ? (
               <div
                 style={{
                   background: "#F5F5F5",
                   borderRadius: 100,
-                  padding: "10px 24px 8px",
                   cursor: "not-allowed",
                   marginRight: 16,
                   width: 274,
-                  textAlign: "center",
+                  height: 56,
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
                 }}
               >
                 <h4 style={{ color: "#757575" }}>Checkout</h4>
@@ -1623,7 +2267,7 @@ const Cart = (props) => {
                 submitting={submitting}
                 label="Checkout"
                 onClick={onDoneForStep3}
-                style={{ width: 324 }}
+                style={{ width: 324, height: 56 }}
                 className={"update-button"}
               />
             )}
@@ -1631,17 +2275,7 @@ const Cart = (props) => {
         )}
       </div>
 
-      <BuyModal
-        visible={visible}
-        // source={NewPatchDetails}
-        // sourceID={selectedForest}
-        onClose={() => onClose()}
-        afterSubmit={() => {
-          onClose();
-          setPageLoading(true);
-          stopPageLoading();
-        }}
-      />
+      <AddNewPaymentMethod showModal={visible} onClose={() => onClose()} />
     </div>
   ) : (
     <div
